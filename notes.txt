@@ -1,0 +1,81 @@
+Create front end for 3 pages, i.e., main page, login page, register page
+
+For authentication (register):
+    In frontend:
+	1. in the register form, add value field, onChange field. Also create states for these input fields.
+	2. create a handlesubmit function that sends a fetch request to the server.
+    In backend:
+	1. Allow cors
+	2. Add json parsing functionality to your server
+	3. Create a model for users (after downloading mongoose package)
+	4. Connect to the database
+	5. In the register endpoint, create a user, and then test from the frontend.
+    Spice in registration:
+	1. Download bcryptjs
+	2. Create a hash using bcrypt.genSaltSync
+	3. Hash password using bcrypt.hashSync
+
+For authentication (login):
+    In backend:
+	1. Get the user
+	2. Use compareSync function of bcrypt to see if password of client and the password in database match
+	3. Use jwt.sign to create a token, and then set a this token in a cookie before sending response to client
+	4. Send response to client
+	5. In fetch of client, save this cookie (by adding 'credentials: include' in the request in fetch)
+	6. To do above task, add {credentials: include, origin: address} inside cors() middleware as an argument
+	7. The benefit of cookie is that it will automatically be sent to server the next time you make a request to any page of the website.
+	8. If the user is logged in, redirect him to blogs page
+
+To Logout:
+	1. Send fetch request to /logout endpoint that sets token to ''.
+	2. In frontend, set username to NULL.
+
+To see if the user is logged in or not, and showing the right header content:
+    In the frontend:
+	1. First of all create userContext that contains user information, and gives it to all its children.
+	2. When the user logs in on the login page, the log in page must set userinfo before navigating to blogs page
+	3. Note: When we click on the logout button in Header, set userInfo to null again.
+	4. From the above two points it is clear that both Login and Header component need the user information, which is why we kept this information global.
+	5. In header, show navbar content value according to userInfo state's value.
+	6. BUT...When someone reloads website, then by default the userInfo is going to be null. As a result, navbar shows wrong info.
+	7. To deal with this, create a fetch request, in useEffect hook, to the server, that verifies if token is present or not i.e., at the validate_token endpoint.
+	9. Based on the value of the response, set the userInfo global state here as well.
+    In the backend:
+	1. Create a validate_token endpoint
+	2. Add cookie-parser middleware in the express app
+	3. Grab cookie from the request using: const { token } = req.cookies;
+	4. use jwt.verify to validate the cookie
+	5. Return response
+
+Create new post page:
+	1. Make basic fields in the form
+	2. Download react-quill using npm i react-quill
+	3. Use the ReactQuill tag in your form
+	----------------------------------------
+	4. Now keep saving what user enters in states (corresponding to each form field) 
+	5. Instead of sending json data to the create_post endpoint, send form data!
+	----------------------------------------
+	6. Create an endpoint to cater the request
+	7. Import multer, and add upload middleware to store the uploded files in a folder.
+	8. In the endpoint, to access form fields, write: req.body.field_name. But to access file, do: req.file. This is because we did: formdata.set('file', FILESTATE) in client code.
+	9. NOW IS THE TIME TO STORE ALL THIS IN OUR DATABASE
+	10. But before that, save the files in Uploads folder with an extension as well along with the name.
+
+View posts on a page:
+	1. Inside the index page component, fetch posts, and send to Post component using map function
+	2. To send each post data to Post component, I used {...post}
+	3. For better formatting of date, use data-fns library
+Binding users to posts:
+	1. Add user field to Post schema, with {type: Schema.Types.ObjectId, ref:'User'}
+	2. In /create endpoint, use jwt.verify to get out userId.
+	3. Move the post creation logic inside the callback function of JWT.verify
+	NOTE: If you are going to test token inside the server, don't forget to add: 'credentials': true in the header of request while making fetch call.
+	4. Now we can use .populate('author', [username]) on results of Post.find to user name of author (instead of id)
+Sort the posts based on time using: .sort({createdAt: -1})
+Limit the posts
+Bringing image files from server i.e., add a middleware:
+	1. app.use('/uploads', express.static(__dirname + '/uploads'))
+
+
+Reading an Individual post:
+

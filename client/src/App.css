@@ -1,0 +1,156 @@
+*{
+  box-sizing: border-box;
+}
+
+body {
+  color: #222;
+}
+
+main {
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+header {
+  padding: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+
+header nav {
+  display: flex;
+  gap: 15px;
+}
+
+header > a {
+  font-weight: bold;
+  font-size: 1.9rem;
+}
+
+/* =================== */
+
+div.post img {
+  max-width: 100%;
+  margin:-10px;
+}
+
+div.post {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  margin-bottom: 40px;
+}
+
+div.post .texts {
+  font-size: 0.9rem;
+}
+
+div.post time {
+  display: block;
+}
+
+div.texts > a {
+  font-size: x-large;
+  font-weight: 700;
+}
+/* =================== */
+/* Styles for login and register page */
+form.login, form.register {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+form.login h1, form.register h1 {
+text-align: center;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-color: #ccc;
+  border-radius: 2.5px;
+}
+
+button {
+  width: 100%;
+  padding: 5px;
+  background-color: #202020;
+  color: white;
+  border-radius: 2.5px;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: black;
+  cursor: pointer;
+}
+
+/* =================== */
+/* Styles for individual post page */
+div.post-page div.image {
+  max-height: 300px;
+  overflow: hidden;
+  display: flex;
+}
+
+div.post-page div.image img {
+  object-fit: cover;
+    object-position: center center;
+}
+
+.author {
+  font-weight: bold;
+}
+
+time {
+  color: #a0a0a0;
+}
+
+/* =================== */
+/* Styles for edit post */ 
+div.post-page .edit-row {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+div.post-page .edit-row a {
+  background-color: #202020;
+  color: white;
+  padding:7.5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-size: 1.3rem;
+  margin-left: 10px;
+}
+
+/* ================= */
+div.list-page .edit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -30px;
+}
+
+div.list-page .edit-row a {
+  background-color: #202020;
+  color: white;
+  padding: 1.5px;
+  padding-top: 3px;
+  padding-bottom: 6px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 1rem;
+  margin-left: 10px;
+  border-radius: 3px;
+}
