@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "./UserContext";
+import { UserContext } from "./authentication/UserContext";
 
 export default function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
@@ -30,25 +30,26 @@ export default function Header() {
       credentials: "include",
     });
     setUserInfo(null);
-    navigator("/login");
+    navigator("/");
   }
 
   return (
     <header>
-      <Link to="/" className="logo">
-        Buddies Blog
+      <Link to="/posts" className="logo">
+        National Open Courseware
       </Link>
       {!userInfo?.username && (
         <nav>
-          <Link to="/login">Login</Link>
+          <Link to="/">Login</Link>
           <Link to="/register">Register</Link>
         </nav>
       )}
       {userInfo?.username && (
         <nav>
-          <Link to="/blogs">Blogs</Link>
+          <Link to="/tutor">AI Tutor</Link>
+          <Link to="/posts">Blogs</Link>
           <Link to="/courses">Courses</Link>
-          <Link to="/books">Books</Link>
+          <Link to="/library">Books</Link>
           <Link to="/chatroom">Chatroom</Link>
           <a onClick={logout}>Logout</a>
         </nav>
