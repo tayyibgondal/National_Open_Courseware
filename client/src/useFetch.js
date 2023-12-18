@@ -13,9 +13,7 @@ export default function useFetch(url) {
         alert("Could not fetch data!");
       }
     };
-
     fetchData();
   }, [url]);
-
   return { data, setData };
 }
