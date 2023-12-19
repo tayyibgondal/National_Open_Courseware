@@ -154,3 +154,300 @@ div.list-page .edit-row a {
   margin-left: 10px;
   border-radius: 3px;
 }
+
+/* =================== */
+/* Styles for book detail post */
+
+.book-page{
+  max-width: 600px;
+  margin: auto 0;
+}
+.book-page h1 {
+  text-align: center;
+}
+
+.book-page > p, .book-page p {
+  text-align: center;
+  font-weight: bold;
+  color: #a0a0a0;
+}
+
+div.book-page .edit-row a {
+  background-color: #202020;
+  color: white;
+  padding: 5.5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-size: 1.3rem;
+  margin-left: 10px;
+}
+
+div.book-page .edit-row {
+display: flex;
+justify-content: center;
+margin-bottom: 20px;
+}
+
+.book-page .summary {
+  margin-bottom: 10px;
+}
+
+.book-page time, .book-page .author, .book-page .download {
+margin-bottom: 10px;
+margin-top: 10px;
+}
+
+.book-page .download {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.book-page .download a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.book-page .download a:hover {
+  background-color: #218838;
+}
+
+/* ========= Library index page ======== */
+.book .info {
+  text-align: left;
+}
+
+.book .author {
+  text-align: left;
+}
+
+div.list-page-book {
+  max-width: 500px;
+  margin: auto;
+}
+
+/* ========= ADD NEW BOOK BUTTON ======== */
+div.list-page-book .edit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -30px;
+}
+
+div.list-page-book .edit-row a {
+  background-color: #202020;
+  color: white;
+  padding: 1.5px;
+  padding-top: 3px;
+  padding-bottom: 6px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 1rem;
+  margin-left: 10px;
+  border-radius: 3px;
+}
+
+div.book .summary {
+  text-align: left;
+}
+
+/* Course Styles */
+/* Course.css */
+
+.course-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.course-title {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.course-info {
+  margin-bottom: 8px;
+}
+
+.info-label {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.details-link {
+  display: block;
+  margin-top: 12px;
+  color: #0b51f3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* CourseDetails.css */
+
+.course-details {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.course-details h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.course-details p {
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.course-details .course-info {
+  margin-top: 20px;
+}
+
+.course-details .edit-row {
+  margin-top: 20px;
+}
+
+.course-details .edit-row .Edit {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #202020;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.course-details .summary {
+  margin-top: 20px;
+  color: #333;
+}
+
+.course-details .author {
+  margin-top: 10px;
+  color: #555;
+}
+
+.course-details time {
+  display: block;
+  margin-top: 10px;
+  color: #777;
+}
+
+.course-details .download {
+  margin-top: 20px;
+}
+
+.course-details .download a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.course-details .download a:hover {
+  background-color: #218838;
+}
+
+.search {
+  margin-bottom: 25px;
+}
+
+.search {
+  display: flex;
+  width: 100%;
+}
+
+.search input[type="text"] {
+  padding: 10px;
+  width: 80%;
+}
+.search div {
+  width: 20%;
+  margin-left: 5px;
+}
+
+.search input[type="submit"] {
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Chatbot styles */
+/* ChatStyles.css */
+
+.tutor {
+  font-family: 'Arial, sans-serif';
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(77, 76, 76, 0.1);
+}
+
+.tutor h1 {
+  color: #333;
+}
+
+.upload-file-form {
+  margin-top: 10px;
+}
+
+.upload-file-form input {
+  margin-bottom: 10px;
+}
+
+.chat-prompt-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.chat-prompt-form input[type="text"] {
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.chat-prompt-form input[type="submit"] {
+  padding: 8px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.response-section {
+  margin-top: 20px;
+}
+
+.tutor h2 {
+  color: #333;
+}
+
+.response {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
