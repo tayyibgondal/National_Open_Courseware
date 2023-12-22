@@ -1,0 +1,46 @@
+.download .button,
+.button.Edit,
+.button.Delete {
+    width: 100%;
+    /* Make buttons full-width */
+    display: block;
+    /* Display buttons as block elements to force them onto new lines */
+    margin-bottom: 10px;
+    /* Add margin between buttons */
+    background-color: green;
+    /* Green color for the download button */
+    color: #fff;
+    /* White text color for better contrast */
+    padding: 10px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.button.Edit,
+.button.Delete {
+    background-color: black;
+    /* Black color for Edit and Delete buttons */
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    /* Stack buttons vertically */
+    align-items: center;
+    /* Center buttons horizontally */
+    margin-top: 20px;
+}
+
+.list-page-career-path .edit-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.create {
+    background-color: black;
+    color: white;
+    border-radius: 3px;
+    padding: 10px
+}
