@@ -1,0 +1,57 @@
+.faq-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.faq-details>div {
+    text-align: center;
+    max-width: 700px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.faq-details h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.faq-details p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.edit-row {
+    display: flex;
+    justify-content: center;
+    gap:10px
+}
+
+.Edit,
+.Delete {
+    display: inline-block;
+    padding: 10px 20px; 
+    margin: 0 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.Delete {
+    background-color: #000;
+}
+.Edit  {
+    display: block;
+    width: 100%;
+}
+
+.Edit:hover,
+.Delete:hover {
+    background-color: #333;
+}
