@@ -9,22 +9,31 @@ const cookieParser = require("cookie-parser");
 const multer = require("multer");
 const uploadMiddleware = multer({ dest: "uploads/" });
 const fs = require("fs");
+const postRoutes = require("./postRoutes");
+const bookRoutes = require("./bookRoutes");
+const courseRoutes = require("./courseRoutes");
+const axios = require("axios");
+const bodyParser = require("body-parser");
 
 // Create a salt
 const salt = bcrypt.genSaltSync(10);
 const secretKey = "kshdi7a8aifh8o373q9fg";
 
 const app = express();
+
+// Middlewares
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // Use cookie-parser middleware
 app.use(cookieParser());
+// Add body-parser middleware to parse JSON bodies
+app.use(bodyParser.json());
 // Middleware for allowing clients to access static resources
 app.use("/uploads", express.static(__dirname + "/uploads"));
-
-// app.get("/", (req, res) => {
-//   res.json("WORKING...");
-// });
+app.use("/posts/", postRoutes);
+app.use("/library/", bookRoutes);
+app.use("/courses/", courseRoutes);
 
 // ====================== AUTHENTICATION ENDPOINTS =============================
 app.post("/login", async (req, res) => {
@@ -82,108 +91,58 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("OK");
 });
 
-// ====================== POST ENDPOINTS =============================
-app.post("/create", uploadMiddleware.single("file"), async (req, res) => {
-  const { originalname, path } = req.file;
-  const parts = originalname.split(".");
-  const ext = parts[parts.length - 1];
-  const newPath = path + "." + ext;
-  fs.renameSync(path, newPath);
+// app.post("/chatpdf-request", async (req, res) => {
+//   const apiUrl = "https://api.chatpdf.com/v1/chats/message";
+//   const headers = {
+//     "Content-Type": "application/json",
+//     "x-api-key": "sec_w2zWAPuDvDlR8K1vx0mdIeXCjzMVC5fI",
+//   };
+//   const requestForApi = {
+//     method: "POST",
+//     headers,
+//     body: JSON.stringify(req.body),
+//   };
+//   console.log(requestForApi);
 
-  const { token } = req.cookies;
-  jwt.verify(token, secretKey, {}, async (err, info) => {
-    if (err) res.status(401).json({ message: "Unauthorized" });
-    // If no error in token verification
-    const { title, summary, content } = req.body;
-    const postDoc = await Post.create({
-      title,
-      summary,
-      content,
-      cover: newPath,
-      author: info.id,
-    });
-    res.status(200).json({ message: "Post created!" });
-  });
-});
+//   try {
+//     const apiResponse = await fetch(apiUrl, requestForApi);
 
-app.get("/posts", async (req, res) => {
-  const posts = await Post.find()
-    .populate("author", ["username"])
-    .sort({ createdAt: -1 })
-    .limit(20);
-  res.status(200).json(posts);
-});
+//     if (apiResponse.ok) {
+//       const apiData = await apiResponse.json();
+//       res.json({ reply: apiData.content });
+//     } else {
+//       res
+//         .status(apiResponse.status)
+//         .json({ error: "Bad response from the AI bot, try again!" });
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
-app.get("/post/:postId", async (req, res) => {
+app.post("/chatpdf-request", async (req, res) => {
+  console.log(req.body);
+  const apiUrl = "https://api.chatpdf.com/v1/chats/message";
+
+  const headers = {
+    "Content-Type": "application/json",
+    "x-api-key": "sec_w2zWAPuDvDlR8K1vx0mdIeXCjzMVC5fI",
+  };
+
   try {
-    const { postId } = req.params;
-    const postDoc = await Post.findById(postId).populate("author", [
-      "username",
-    ]);
-    res.status(200).json(postDoc);
-  } catch (e) {
-    res.status(500).json({ message: "Internal server error!" });
-  }
-});
+    const apiResponse = await axios.post(apiUrl, req.body, { headers });
 
-app.put("/edit/:postId", uploadMiddleware.single("file"), async (req, res) => {
-  const { postId } = req.params;
-
-  // If user has sent file, update its extension in the saved folder
-  let newPath = null;
-  try {
-    if (req.file) {
-      const { originalname, path } = req.file;
-      const parts = originalname.split(".");
-      const ext = parts[parts.length - 1];
-      newPath = path + "." + ext;
-      fs.renameSync(path, newPath);
+    if (apiResponse.status === 200) {
+      res.json({ content: apiResponse.data.content });
+    } else {
+      res
+        .status(apiResponse.status)
+        .json({ error: "Bad response from the AI bot, try again!" });
     }
-
-    // We need user id; also, we need to verify the user
-    const { token } = req.cookies;
-    jwt.verify(token, secretKey, {}, async (err, info) => {
-      if (err) res.status(401).json({ message: "Unauthorized" });
-
-      // If no error in token verification, proceed towards update
-      const { title, summary, content } = req.body;
-
-      // Check if the current user is the author of the post or not
-      const postDocOld = await Post.findById(postId);
-      console.log("This is old doc: ", postDocOld);
-      if (postDocOld.author._id != info.id) {
-        res.status(401).json({ message: "Not authorized to update the post!" });
-      }
-
-      // Use findByIdAndUpdate with the correct syntax
-      const updatedPost = await Post.findByIdAndUpdate(
-        postId,
-        {
-          title,
-          summary,
-          content,
-          cover: newPath==null ? postDocOld.cover: newPath, // Keep the old cover if no new file is uploaded
-        },
-        { new: true } // This option returns the modified document, not the original
-      );
-      console.log("This is updated document: ", updatedPost);
-        console.log("returning successfully...")
-      res.status(200).json({ message: "Post updated!" });
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Internal server error!" });
-  }
-});
-
-app.delete("/delete/:postId", async (req, res) => {
-  try {
-    // Extract the post id
-    const { postId } = req.params;
-    // Delete the post
-    const deletedDoc = await Post.findByIdAndDelete(postId);
-    res.status(200).json({message: "Successfully deleted"});
-  } catch(e) {
-    res.status(500).json({message: 'Could not delete!'})
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

@@ -78,4 +78,14 @@ Bringing image files from server i.e., add a middleware:
 
 
 Reading an Individual post:
+	1. Make an endpoint that sends 1 post depending upon the id present in request.params
+	2. Make fetch request on client side to get and show that data in the browser
 
+Edit a post:
+	1. In post details page, show edit button only to the user if post.author.id == user.id (present in context)
+	2. When click on edit button, take to edit page
+	3. Show a prefilled form (states, value=states inside form fields, and onChange setting in from fields). 
+	4. Sends data to /update endpoint (onSubmit), along with post id and user id.
+	5. In backend, verify if this post's author is the same the id of author logged in (do this using jwt)
+	6. Update the data using findByIdAndUpdate function.
+	7. Redirect to main page on successful update
