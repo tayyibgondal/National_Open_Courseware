@@ -1,7 +1,35 @@
+/*
+STEPS TO DO IF YOU WANT TO ACHIEVE TRANSLATION
+ 
+1. If you want to translate a particular field, make a state 'displayedContent'.
+2. Use this state in your jsx.
+3. Make another state for showing translate button message.
+4. Now generally displayedContent = actual content. 
+5. When button is clicked, displayedContent = translated(actual content) or the actual content, depending upon the button msg.
+
+*/
+
 import { useState } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { UserContext } from "../authentication/UserContext";
+import { useNavigate } from "react-router-dom";
+import translate from "translate";
+import Footer from "../Footer";
 
 export default function Chat() {
-  const secretKey = "sec_w2zWAPuDvDlR8K1vx0mdIeXCjzMVC5fI";
+  const secretKey = process.env.REACT_APP_TUTOR_KEY;
+  // Verifying if user is logged in or note
+  const { userInfo } = useContext(UserContext);
+  const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(null);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   const [files, setFiles] = useState(null);
   // States to be updated when user uploads a file
@@ -11,6 +39,9 @@ export default function Chat() {
   // States to be updated when a user prompts the ai bot
   const [reply, setReply] = useState(null);
   const [prompt, setPrompt] = useState(null);
+  // States regarding translations
+  const [btnMsg, setBtnMsg] = useState("Can't understand? Translate to Urdu!");
+  const [displayedReply, setDisplayedReply] = useState(null);
 
   // Fired when user uploads a file
   async function handleUpload(e) {
@@ -86,6 +117,8 @@ export default function Chat() {
       if (apiResponse.ok) {
         const apiData = await apiResponse.json();
         setReply(apiData.content);
+        setDisplayedReply(reply);
+        setBtnMsg("Can't understand? Translate to Urdu!");
         return;
       } else {
         alert("Bad response from the AI bot, try again!");
@@ -132,33 +165,63 @@ export default function Chat() {
   //     }
   //   }
 
+  async function translateText() {
+    translate.engine = process.env.REACT_APP_TRANSLATE_ENGINE;
+    translate.key = process.env.REACT_APP_TRANSLATE_KEY;
+    try {
+      if (btnMsg == "Can't understand? Translate to Urdu!") {
+        const text = await translate(reply, "ur");
+        setDisplayedReply(text);
+        setBtnMsg("See the english version");
+      } else {
+        setDisplayedReply(reply);
+        setBtnMsg("Can't understand? Translate to Urdu!");
+      }
+    } catch (error) {
+      console.error("Error translating text:", error);
+    }
+  }
+
   return (
-    <div className="tutor">
-      <h1>Chat</h1>
-      <p>{message}</p>
-      <form onSubmit={handleUpload} className="upload-file-form">
-        <input type="file" onChange={(e) => setFiles(e.target.files)} />
-        <button>Give to Language model</button>
-      </form>
+    <div>
+      {canAccess && (
+        <div className="tutor">
+          <div className="toprow">
+            <h1>Chat</h1>
+            <div>
+              <button onClick={() => navigator(-1)}>Go Back</button>
+            </div>
+          </div>
+          <p>{message}</p>
+          <form onSubmit={handleUpload} className="upload-file-form">
+            <input type="file" onChange={(e) => setFiles(e.target.files)} />
+            <button>Give to Language model</button>
+          </form>
 
-      {true && (
-        <form onSubmit={handleChat} className="chat-prompt-form">
-          <input
-            type="text"
-            placeholder="Prompt the tutor..."
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-          />
-          <input type="submit" value="Ask" />
-        </form>
-      )}
+          {uploaded && (
+            <form onSubmit={handleChat} className="chat-prompt-form">
+              <input
+                type="text"
+                placeholder="Prompt the tutor..."
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
+              <input type="submit" value="Ask" />
+            </form>
+          )}
 
-      {reply && (
-        <div className="response-section">
-          <h2>Response</h2>
-          <div className="response">{reply}</div>
+          {reply && (
+            <div className="response-section">
+              <h2>Response</h2>
+              <div className="response">{displayedReply}</div>
+              <button onClick={translateText} className="translateButton">
+                {btnMsg}
+              </button>
+            </div>
+          )}
         </div>
       )}
+      <Footer></Footer>
     </div>
   );
 }
