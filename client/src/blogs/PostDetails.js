@@ -4,15 +4,28 @@ import { Link } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import useFetch from "../useFetch";
 import { UserContext } from "../authentication/UserContext";
+import translate from "translate";
+import Footer from "../Footer";
 
 export default function PostDetails() {
+  // Verifying if user is logged in or note
   const { userInfo } = useContext(UserContext);
+  const navigator = useNavigate();
   const { postId } = useParams();
-  const { data, setData } = useFetch(
+  // Fetching the data
+  const { data, setData, canAccess } = useFetch(
     `http://localhost:4000/posts/${postId}`
   );
-  const navigator = useNavigate();
+  // For translations
+  const [displayedTitle, setDisplayedTitle] = useState("");
+  const [displayedContent, setDisplayedContent] = useState("");
+  const [buttonText, setButtonText] = useState("Translate to Urdu");
+  useEffect(() => {
+    setDisplayedContent(data?.content);
+    setDisplayedTitle(data?.title);
+  }, [data]);
 
+  // Function to delete the post
   async function handleDelete(e) {
     e.preventDefault();
     const apiUrl = `http://localhost:4000/posts/delete/${postId}`;
@@ -27,30 +40,66 @@ export default function PostDetails() {
     }
   }
 
+  // Function to translate the content and title
+  async function translateText() {
+    translate.engine = process.env.REACT_APP_TRANSLATE_ENGINE;
+    translate.key = process.env.REACT_APP_TRANSLATE_KEY;
+    console.log(process.env.TRANSLATE_ENGINE, process.env.TRANSLATE_KEY);
+    try {
+      if (buttonText == "Translate to Urdu") {
+        setButtonText("Translate to English");
+        const transTitle = await translate(data.title, "ur");
+        const transContent = await translate(data.content, "ur");
+        setDisplayedContent(transContent);
+        setDisplayedTitle(transTitle);
+      } else {
+        setButtonText("Translate to Urdu");
+        setDisplayedContent(data.content);
+        setDisplayedTitle(data.title);
+      }
+    } catch (error) {
+      console.error("Error translating text:", error);
+    }
+  }
+
   return (
-    <div className="post-page">
-      {data && (
-        <div>
-          <div className="image">
-            <img
-              style={{ width: "100%" }}
-              src={`http://localhost:4000/uploads/${data.cover.split("\\")[1]}`}
-            />
-          </div>
-          {userInfo.id === data.author._id && (
-            <div class="edit-row">
-              <Link to={`/edit/${data._id}`} className="Edit">
-                Edit
-              </Link>
-              <a href="" className="Edit" onClick={handleDelete}>
-                Delete
-              </a>
+    <div>
+      {canAccess && (
+        <div className="post-page">
+          {data && (
+            <div>
+              <button onClick={() => navigator(-1)}>Go Back</button>
+              <div className="edit-row translate">
+                <button className="Edit" onClick={translateText}>
+                  {buttonText}
+                </button>
+              </div>
+              <div className="image">
+                <img
+                  style={{ width: "100%" }}
+                  src={`http://localhost:4000/uploads/${
+                    data.cover.split("\\")[1]
+                  }`}
+                />
+              </div>
+
+              {userInfo.id === data.author._id && (
+                <div class="edit-row">
+                  <Link to={`/edit/${data._id}`} className="Edit">
+                    Edit
+                  </Link>
+                  <a href="" className="Edit" onClick={handleDelete}>
+                    Delete
+                  </a>
+                </div>
+              )}
+              <h1>{displayedTitle}</h1>
+              <div dangerouslySetInnerHTML={{ __html: displayedContent }} />
+              <div className="author">By: {data.author.username}</div>
+              <time>{formatISO9075(data.createdAt)}</time>
+              <Footer></Footer>
             </div>
           )}
-          <h1>{data.title}</h1>
-          <div dangerouslySetInnerHTML={{ __html: data.content }} />
-          <div className="author">By: {data.author.username}</div>
-          <time>{formatISO9075(data.createdAt)}</time>
         </div>
       )}
     </div>
