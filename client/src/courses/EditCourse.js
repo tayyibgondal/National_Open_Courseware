@@ -6,7 +6,6 @@ import { useContext, useState } from "react";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
 
-
 export default function EditCourse() {
   const navigator = useNavigate();
   const { userInfo } = useContext(UserContext);
@@ -21,10 +20,11 @@ export default function EditCourse() {
   const { courseId } = useParams();
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!localStorage.getItem("id")) {
       navigator("/");
     }
     setCanAccess(true);
+
     const fetchData = async () => {
       const response = await fetch(`http://localhost:4000/courses/${courseId}`);
       if (response.status === 200) {

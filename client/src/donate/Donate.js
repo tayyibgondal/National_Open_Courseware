@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Donate() {
   const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -13,6 +15,14 @@ export default function Donate() {
     currency: "",
   });
   const [msg, setMsg] = useState("");
+
+  // Secure the endpoints
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -63,67 +73,71 @@ export default function Donate() {
 
   return (
     <section className="forms">
-      <div>{msg}</div>
-        <button onClick={() => navigator(-1)}>Go Back</button>
-      <form onSubmit={handleFormDataSubmit}>
-        <label htmlFor="first-name">First Name</label>
-        <input
-          type="text"
-          name="firstName"
-          id="first-name"
-          value={formData.firstName}
-          onChange={handleInputChange}
-        />
+      {canAccess && (
+        <div>
+          <div>{msg}</div>
+          <button onClick={() => navigator(-1)}>Go Back</button>
+          <form onSubmit={handleFormDataSubmit}>
+            <label htmlFor="first-name">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              id="first-name"
+              value={formData.firstName}
+              onChange={handleInputChange}
+            />
 
-        <label htmlFor="last-name">Last Name</label>
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleInputChange}
-        />
+            <label htmlFor="last-name">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+            />
 
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          value={formData.email}
-          onChange={handleInputChange}
-        />
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
 
-        <label htmlFor="number">Phone Number</label>
-        <input
-          type="number"
-          name="number"
-          value={formData.number}
-          onChange={handleInputChange}
-        />
+            <label htmlFor="number">Phone Number</label>
+            <input
+              type="number"
+              name="number"
+              value={formData.number}
+              onChange={handleInputChange}
+            />
 
-        <label htmlFor="amount">Amount</label>
-        <input
-          type="number"
-          name="amount"
-          value={formData.amount}
-          onChange={handleInputChange}
-        />
+            <label htmlFor="amount">Amount</label>
+            <input
+              type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleInputChange}
+            />
 
-        <select
-          name="currency"
-          id="currency-select"
-          value={formData.currency}
-          onChange={handleInputChange}
-        >
-          <option value="">--Please choose an option--</option>
-          <option value="PKR">PKR</option>
-          <option value="INR">INR</option>
-          <option value="USD">USD</option>
-          <option value="Euro">Euro</option>
-        </select>
+            <select
+              name="currency"
+              id="currency-select"
+              value={formData.currency}
+              onChange={handleInputChange}
+            >
+              <option value="">--Please choose an option--</option>
+              <option value="PKR">PKR</option>
+              <option value="INR">INR</option>
+              <option value="USD">USD</option>
+              <option value="Euro">Euro</option>
+            </select>
 
-        <input type="submit" value="Donate" />
-      </form>
-      <Footer></Footer>
+            <input type="submit" value="Donate" />
+          </form>
+          <Footer></Footer>
+        </div>
+      )}
     </section>
   );
 }
