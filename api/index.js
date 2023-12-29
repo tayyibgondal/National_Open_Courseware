@@ -14,6 +14,10 @@ const bookRoutes = require("./bookRoutes");
 const courseRoutes = require("./courseRoutes");
 const axios = require("axios");
 const bodyParser = require("body-parser");
+const careerRoutes = require("./careerPathRoutes");
+const contactRoute = require("./contactRoute");
+const faqRoute = require("./faqRoutes");
+const donationRoute = require("./donationRoutes");
 
 // Create a salt
 const salt = bcrypt.genSaltSync(10);
@@ -27,13 +31,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Use cookie-parser middleware
 app.use(cookieParser());
-// Add body-parser middleware to parse JSON bodies
+// Add body-parser middleware to parse JSON bodies of forms (only for non-url encoded forms)
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 // Middleware for allowing clients to access static resources
 app.use("/uploads", express.static(__dirname + "/uploads"));
+// Rotues
 app.use("/posts/", postRoutes);
 app.use("/library/", bookRoutes);
 app.use("/courses/", courseRoutes);
+app.use("/careerpaths/", careerRoutes);
+app.use("/contact/", contactRoute);
+app.use("/faqs/", faqRoute);
+app.use("/donate/", donationRoute);
+
+// ====================== AUTHENTICATION MIDDLEWARE =========================
 
 // ====================== AUTHENTICATION ENDPOINTS =============================
 app.post("/login", async (req, res) => {
@@ -42,20 +54,23 @@ app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     // Find user
     const userDoc = await User.findOne({ username });
-    // Test password
+    // If we do find a user, then we see if passwords match or not
     const passwordTestResult = userDoc._id
       ? bcrypt.compareSync(password, userDoc.password)
       : false;
-
     // If user exists and passwords match
     if (userDoc._id && passwordTestResult) {
-      jwt.sign({ username, id: userDoc._id }, secretKey, {}, (e, token) => {
-        if (e) throw e;
-        res
-          .status(200)
-          .cookie("token", token)
-          .json({ username: username, id: userDoc._id });
-      });
+      jwt.sign(
+        { username, id: userDoc._id },
+        secretKey,
+        { expiresIn: "1h" },
+        (e, token) => {
+          if (e) throw e;
+          res
+            .status(200)
+            .json({ token });
+        }
+      );
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }
@@ -91,6 +106,7 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("OK");
 });
 
+// End point that forwards client's request to chatPDF
 // app.post("/chatpdf-request", async (req, res) => {
 //   const apiUrl = "https://api.chatpdf.com/v1/chats/message";
 //   const headers = {
