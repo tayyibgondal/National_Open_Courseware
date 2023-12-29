@@ -13,7 +13,7 @@ export default function EditFaq() {
   const { faqId } = useParams();
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!localStorage.getItem("id")) {
       navigator("/");
     }
     setCanAccess(true);

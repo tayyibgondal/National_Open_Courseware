@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,12 +6,21 @@ import useFetch from "../useFetch";
 import { UserContext } from "../authentication/UserContext";
 import "./details.css";
 import Footer from "../Footer";
+import { useEffect } from "react";
 
 export default function FaqDetails() {
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
   const { faqId } = useParams();
-  const { data, canAccess } = useFetch(`http://localhost:4000/faqs/${faqId}`);
+  const { data } = useFetch(`http://localhost:4000/faqs/${faqId}`);
+
+  const [canAccess, setCanAccess] = useState(false);
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   async function handleDelete() {
     try {

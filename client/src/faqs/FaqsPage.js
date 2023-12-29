@@ -3,14 +3,21 @@ import useFetch from "../useFetch";
 import FaqItem from "./FaqItem";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function FaqsPage() {
   const navigator = useNavigate();
-  const {
-    data: faqs,
-    setData: setFaqs,
-    canAccess,
-  } = useFetch("http://127.0.0.1:4000/faqs");
+  const { data: faqs, setData: setFaqs } = useFetch(
+    "http://127.0.0.1:4000/faqs"
+  );
+
+  const [canAccess, setCanAccess] = useState(false);
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   return (
     <div>
@@ -18,6 +25,7 @@ export default function FaqsPage() {
         <div className="list-page-faq">
           <h1>Frequently Asked Questions</h1>
           <button onClick={() => navigator(-1)}>Go Back</button>
+          <Link to="/faqs/create">Create a faq</Link>
 
           {faqs && faqs.map((faq) => <FaqItem key={faq._id} {...faq} />)}
           {faqs && <Footer />}

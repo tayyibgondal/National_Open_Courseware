@@ -10,7 +10,7 @@ export default function CreateFaq() {
   const [canAccess, setCanAccess] = useState(null);
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!localStorage.getItem("id")) {
       navigator("/");
     }
     setCanAccess(true);
