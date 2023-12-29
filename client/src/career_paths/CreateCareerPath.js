@@ -40,6 +40,7 @@ export default function CreateCareerPath() {
   const navigator = useNavigate();
   const { userInfo } = useContext(UserContext);
   const [canAccess, setCanAccess] = useState(null);
+
   // Secure the endpoints
   useEffect(() => {
     if (!localStorage.getItem("id")) {

@@ -24,8 +24,9 @@ export default function Chat() {
   const navigator = useNavigate();
   const [canAccess, setCanAccess] = useState(null);
 
+  // Secure the endpoints
   useEffect(() => {
-    if (!userInfo) {
+    if (!localStorage.getItem("id")) {
       navigator("/");
     }
     setCanAccess(true);
