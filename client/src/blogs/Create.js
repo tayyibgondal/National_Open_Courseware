@@ -40,12 +40,14 @@ export default function Create() {
   const navigator = useNavigate();
   const [canAccess, setCanAccess] = useState(true);
 
-  useEffect(() => {
-    if (!userInfo) {
-      navigator("/");
-    }
-    setCanAccess(true);
-  });
+useEffect(() => {
+  // SECURE THE ENDPOINT
+  if (!localStorage.getItem("id")) {
+    navigator("/");
+  }
+  // Otherwise set canAccess to true.
+  setCanAccess(true);
+})
 
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");

@@ -7,9 +7,19 @@ import Footer from "../Footer";
 export default function IndexPage() {
   const navigator = useNavigate();
   const [query, setQuery] = useState("");
-  const { data: posts, setData: setPosts, canAccess } = useFetch(
+    const [canAccess, setCanAccess] = useState(null);
+
+  const { data: posts, setData: setPosts,  } = useFetch(
     "http://127.0.0.1:4000/posts"
   );
+  
+  useEffect(()=> {
+    // SECURE THE ENDPOINT, even on browser window reload
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  })
 
   async function searchPosts(e) {
     e.preventDefault();
@@ -21,7 +31,6 @@ export default function IndexPage() {
       if (response.ok) {
         const newData = await response.json();
         setPosts(newData);
-        console.log('done');
       } 
       // setPosts(updatedPosts);
       return;

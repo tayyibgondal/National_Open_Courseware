@@ -4,24 +4,43 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const uploadMiddleware = multer({ dest: "uploads/" });
 const fs = require("fs");
-
 // Create a salt
 const secretKey = "kshdi7a8aifh8o373q9fg";
 
 // Create a router
 const router = express.Router();
 
-// ====================== POST ENDPOINTS =============================
-router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
-  const { originalname, path } = req.file;
-  const parts = originalname.split(".");
-  const ext = parts[parts.length - 1];
-  const newPath = path + "." + ext;
-  fs.renameSync(path, newPath);
+// // ====================== AUTHENTICATION MIDDLEWARE =========================
+// const authMiddleware = (req, res, next) => {
+//   const token = req.headers.authorization;
+//   if (!token) {
+//     console.log("missing");
+//     return res.status(401).json({ message: "Auth token missing" });
+//   }
 
-  const { token } = req.cookies;
-  jwt.verify(token, secretKey, {}, async (err, info) => {
-    if (err) res.status(401).json({ message: "Unauthorized" });
+//   jwt.verify(token, secretKey, (err, info) => {
+//     if (err) {
+//       console.log("wrong");
+//       req.user_ki_id = info.id;
+//       return res.status(401).json({ message: "Invalid token" });
+//     }
+//   });
+
+//   next();
+// };
+
+// ====================== POST ENDPOINTS =============================
+router.post(
+  "/create",
+
+  uploadMiddleware.single("file"),
+  async (req, res) => {
+    const { originalname, path } = req.file;
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    const newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+
     // If no error in token verification
     const { title, summary, content } = req.body;
     const postDoc = await Post.create({
@@ -29,11 +48,11 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
       summary,
       content,
       cover: newPath,
-      author: info.id,
+      author: req.user_ki_id,
     });
     res.status(200).json({ message: "Post created!" });
-  });
-});
+  }
+);
 
 router.get("/", async (req, res) => {
   const posts = await Post.find()
@@ -55,32 +74,30 @@ router.get("/:postId", async (req, res) => {
   }
 });
 
-router.put("/edit/:postId", uploadMiddleware.single("file"), async (req, res) => {
-  const { postId } = req.params;
+router.put(
+  "/edit/:postId",
 
-  // If user has sent file, update its extension in the saved folder
-  let newPath = null;
-  try {
-    if (req.file) {
-      const { originalname, path } = req.file;
-      const parts = originalname.split(".");
-      const ext = parts[parts.length - 1];
-      newPath = path + "." + ext;
-      fs.renameSync(path, newPath);
-    }
+  uploadMiddleware.single("file"),
+  async (req, res) => {
+    const { postId } = req.params;
 
-    // We need user id; also, we need to verify the user
-    const { token } = req.cookies;
-    jwt.verify(token, secretKey, {}, async (err, info) => {
-      if (err) res.status(401).json({ message: "Unauthorized" });
+    // If user has sent file, update its extension in the saved folder
+    let newPath = null;
+    try {
+      if (req.file) {
+        const { originalname, path } = req.file;
+        const parts = originalname.split(".");
+        const ext = parts[parts.length - 1];
+        newPath = path + "." + ext;
+        fs.renameSync(path, newPath);
+      }
 
-      // If no error in token verification, proceed towards update
       const { title, summary, content } = req.body;
 
       // Check if the current user is the author of the post or not
       const postDocOld = await Post.findById(postId);
       console.log("This is old doc: ", postDocOld);
-      if (postDocOld.author._id != info.id) {
+      if (postDocOld.author._id != req.user_ki_id) {
         res.status(401).json({ message: "Not authorized to update the post!" });
       }
 
@@ -91,18 +108,18 @@ router.put("/edit/:postId", uploadMiddleware.single("file"), async (req, res) =>
           title,
           summary,
           content,
-          cover: newPath==null ? postDocOld.cover: newPath, // Keep the old cover if no new file is uploaded
+          cover: newPath == null ? postDocOld.cover : newPath, // Keep the old cover if no new file is uploaded
         },
         { new: true } // This option returns the modified document, not the original
       );
       console.log("This is updated document: ", updatedPost);
-        console.log("returning successfully...")
+      console.log("returning successfully...");
       res.status(200).json({ message: "Post updated!" });
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Internal server error!" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error!" });
+    }
   }
-});
+);
 
 router.delete("/delete/:postId", async (req, res) => {
   try {
@@ -110,9 +127,9 @@ router.delete("/delete/:postId", async (req, res) => {
     const { postId } = req.params;
     // Delete the post
     const deletedDoc = await Post.findByIdAndDelete(postId);
-    res.status(200).json({message: "Successfully deleted"});
-  } catch(e) {
-    res.status(500).json({message: 'Could not delete!'})
+    res.status(200).json({ message: "Successfully deleted" });
+  } catch (e) {
+    res.status(500).json({ message: "Could not delete!" });
   }
 });
 
@@ -139,6 +156,5 @@ router.get("/search/:query", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
 
 module.exports = router;

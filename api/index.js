@@ -45,7 +45,22 @@ app.use("/contact/", contactRoute);
 app.use("/faqs/", faqRoute);
 app.use("/donate/", donationRoute);
 
-// ====================== AUTHENTICATION MIDDLEWARE =========================
+// // ====================== AUTHENTICATION MIDDLEWARE =========================
+// const authMiddleware = (req, res, next) => {
+//   const token = req.headers.authorization;
+//   if (!token) {
+//     return res.status(401).json({ message: "Auth token missing" });
+//   }
+
+//   jwt.verify(token, secretKey, (err, info) => {
+//     if (err) {
+//       return res.status(401).json({ message: "Invalid token" });
+//     }
+//   });
+
+//   req.user_ki_id = info.id;
+//   next();
+// };
 
 // ====================== AUTHENTICATION ENDPOINTS =============================
 app.post("/login", async (req, res) => {
@@ -66,9 +81,10 @@ app.post("/login", async (req, res) => {
         { expiresIn: "1h" },
         (e, token) => {
           if (e) throw e;
-          res
-            .status(200)
-            .json({ token });
+          // To show or unshow website, we'll use token stored in local storage
+          // To show specific buttons etc, we'll use the user id which we'll save as a context in frontend.
+          // We can also use user id for both tasks
+          res.status(200).json({ token, id: userDoc._id });
         }
       );
     } else {
@@ -91,14 +107,6 @@ app.post("/register", async (req, res) => {
   } catch (e) {
     res.status(500).json({ message: "Could not register" });
   }
-});
-
-app.get("/verify_token", (req, res) => {
-  const { token } = req.cookies;
-  jwt.verify(token, secretKey, {}, (err, info) => {
-    if (err) res.status(401).json({ message: "Unauthorized" });
-    res.status(200).json(info);
-  });
 });
 
 app.post("/logout", (req, res) => {

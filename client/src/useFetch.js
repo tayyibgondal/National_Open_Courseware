@@ -1,32 +1,24 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "./authentication/UserContext";
-import { useNavigate } from "react-router-dom";
 
 export default function useFetch(url) {
   const [data, setData] = useState(null);
-  const { userInfo } = useContext(UserContext);
-  const navigator = useNavigate();
-  const [canAccess, setCanAccess]= useState(null);
 
   useEffect(() => {
-    // Authenticate the user before collecting data from database
-    
-    setCanAccess(true);
-
     const fetchData = async () => {
-      const response = await fetch(url, {
-        headers: {
-          credentials: "include",
-        },
-      });
+      const response = await fetch(url);
       if (response.status === 200) {
         const data = await response.json();
         setData(data);
-      } else {
+      }
+      // COULD BE DONE - if doing server side authorization too
+      // else if (response.status == 401) {
+      //   navigator("/");
+      // }
+      else {
         alert("Could not fetch data!");
       }
     };
     fetchData();
   }, [url]);
-  return { data, setData, canAccess };
+  return { data, setData };
 }

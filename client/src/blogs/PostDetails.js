@@ -8,19 +8,27 @@ import translate from "translate";
 import Footer from "../Footer";
 
 export default function PostDetails() {
-  // Verifying if user is logged in or note
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
   const { postId } = useParams();
+  const [canAccess, setCanAccess] = useState();
   // Fetching the data
-  const { data, setData, canAccess } = useFetch(
+  const { data, setData } = useFetch(
     `http://localhost:4000/posts/${postId}`
   );
-  // For translations
+  // For translations  
   const [displayedTitle, setDisplayedTitle] = useState("");
   const [displayedContent, setDisplayedContent] = useState("");
   const [buttonText, setButtonText] = useState("Translate to Urdu");
+
   useEffect(() => {
+    // SECURE THE ENDPOINT
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    // Otherwise set canAccess to true.
+    setCanAccess(true);
+
     setDisplayedContent(data?.content);
     setDisplayedTitle(data?.title);
   }, [data]);
@@ -83,7 +91,7 @@ export default function PostDetails() {
                 />
               </div>
 
-              {userInfo.id === data.author._id && (
+              {localStorage.getItem("id") === data.author._id && (
                 <div class="edit-row">
                   <Link to={`/edit/${data._id}`} className="Edit">
                     Edit

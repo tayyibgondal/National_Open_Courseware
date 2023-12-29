@@ -15,13 +15,15 @@ export default function EditPost() {
   const [summary, setSummary] = useState(null);
   const [content, setContent] = useState(null);
   const [files, setFiles] = useState(null);
-  
+
   useEffect(() => {
-    if(!userInfo) {
-      navigator('/');
+    // SECURE THE ENDPOINT, even on browser window reload
+    if (!localStorage.getItem("id")) {
+      navigator("/");
     }
     setCanAccess(true);
 
+    // Fetch data for one post
     const fetchData = async () => {
       const response = await fetch(`http://localhost:4000/posts/${postId}`);
       if (response.status === 200) {
