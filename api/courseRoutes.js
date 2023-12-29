@@ -46,16 +46,10 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
 
     const { token } = req.cookies;
     jwt.verify(token, secretKey, {}, async (err, info) => {
-    //   if (err) res.status(401).json({ message: "Unauthorized" });
+      //   if (err) res.status(401).json({ message: "Unauthorized" });
       // If no error in token verification
-      const {
-        name,
-        instructor,
-        email,
-        university,
-        year,
-        description,
-      } = req.body;
+      const { name, instructor, email, university, year, description } =
+        req.body;
       const course = await Course.create({
         name,
         instructor,
@@ -64,7 +58,7 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
         year,
         description,
         content: newPath,
-        uploader: info.id
+        uploader: info.id,
       });
       res.status(200).json({ message: "Course added!" });
     });
@@ -94,14 +88,8 @@ router.put(
       jwt.verify(token, secretKey, {}, async (err, info) => {
         // if (err) res.status(401).json({ message: "Unauthorized" });
         // If no error in token verification, proceed towards update
-        const {
-          name,
-          instructor,
-          email,
-          university,
-          year,
-          description,
-        } = req.body;
+        const { name, instructor, email, university, year, description } =
+          req.body;
         const courseOld = await Course.findById(courseId);
         // Use findByIdAndUpdate with the correct syntax
         const updatedCourse = await Course.findByIdAndUpdate(
@@ -125,6 +113,21 @@ router.put(
     }
   }
 );
+
+// Delete endpoint
+router.delete("/delete/:courseId", async (req, res) => {
+  const { courseId } = req.params; 
+  try {
+    const course = await Course.findByIdAndDelete(courseId);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    res.json({ message: "Deleted successfully" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error!" });
+  }
+});
 
 // Search functionality
 router.get("/search/:query", async (req, res) => {

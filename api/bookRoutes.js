@@ -104,9 +104,25 @@ router.put(
   }
 );
 
+// Delete endpoint
+router.delete("/delete/:bookId", async (req, res) => {
+  const { bookId } = req.params; 
+  try {
+    const book = await Book.findByIdAndDelete(bookId);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    res.json({ message: "Deleted successfully" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error!" });
+  }
+});
+
 // Search a book
 router.get("/search/:query", async (req, res) => {
-  const { query } = req.params;  try {
+  const { query } = req.params;
+  try {
     const searchResults = await Book.find(
       { $text: { $search: query } },
       { score: { $meta: "textScore" } }
