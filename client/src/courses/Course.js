@@ -1,7 +1,15 @@
-import { formatISO9075 } from 'date-fns';
-import {Link} from "react-router-dom";
+import { formatISO9075 } from "date-fns";
+import { Link } from "react-router-dom";
 
-export default function Course({ _id, name, instructor, email, university, year, createdAt }) {
+export default function Course({
+  _id,
+  name,
+  instructor,
+  email,
+  university,
+  year,
+  createdAt,
+}) {
   return (
     <div className="course-card">
       <h2 className="course-title">{name}</h2>

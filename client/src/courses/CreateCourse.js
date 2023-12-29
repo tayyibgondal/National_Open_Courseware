@@ -6,7 +6,6 @@ import { UserContext } from "../authentication/UserContext";
 import { useEffect } from "react";
 import Footer from "../Footer";
 
-
 const modules = {
   toolbar: [
     [{ header: [1, 2, false] }],
@@ -42,7 +41,7 @@ export default function CreateCourse() {
   const { userInfo } = useContext(UserContext);
   const [canAccess, setCanAccess] = useState(null);
   useEffect(() => {
-    if (!userInfo) {
+    if (!localStorage.getItem("id")) {
       navigator("/");
     }
     setCanAccess(true);

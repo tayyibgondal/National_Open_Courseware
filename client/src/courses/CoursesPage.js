@@ -4,15 +4,20 @@ import { Link, useNavigate } from "react-router-dom";
 import Course from "./Course";
 import Footer from "../Footer";
 
-
 export default function CoursesPage() {
   const [query, setQuery] = useState("");
   const navigator = useNavigate();
-  const {
-    data: courses,
-    setData: setCourses,
-    canAccess,
-  } = useFetch("http://127.0.0.1:4000/courses");
+  const { data: courses, setData: setCourses } = useFetch(
+    "http://127.0.0.1:4000/courses"
+  );
+  const [canAccess, setCanAccess] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   async function searchCourses(e) {
     e.preventDefault();

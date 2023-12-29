@@ -1,21 +1,26 @@
 import { formatISO9075 } from "date-fns";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../useFetch";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
-
 
 export default function CourseDetails() {
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
 
   const { courseId } = useParams();
-  const { data, canAccess } = useFetch(
-    `http://localhost:4000/courses/${courseId}`
-  );
+  const { data } = useFetch(`http://localhost:4000/courses/${courseId}`);
+  const [canAccess, setCanAccess] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   async function handleDelete() {
     try {
