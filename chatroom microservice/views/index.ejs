@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Chatrooms</title>
+    <script defer src="http://localhost:7000/socket.io/socket.io.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #room-container {
+            display: block;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .room {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .room a {
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            padding: 8px 16px;
+            border: 2px solid #000;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .room a:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            max-width: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        input {
+            flex: 1;
+            width: auto;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
+        button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+            margin-top: 17px;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        #external-link-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #external-link-button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome to Chatrooms</h1>
+
+    <% if (Object.keys(chatroom).length> 0) { %>
+        <div id="room-container">
+            <% Object.keys(chatroom).forEach(room=> { %>
+                <div class="room">
+                    <%= room %>
+                        <a href="/<%= room %>">Join</a>
+                </div>
+                <% }) %>
+        </div>
+        <% } %>
+
+            <form action="/room" method="POST">
+                <input name="room" type="text" required>
+                <button type="submit">Create new room</button>
+            </form>
+
+            <button id="external-link-button" onclick="goToExternalLink()">Go back to courseware login</button>
+
+            <script>
+                function goToExternalLink() {
+                    // Replace 'https://example.com' with your external link
+                    window.location.href = 'http://localhost:3000/posts';
+                }
+            </script>
+</body>
+
+</html>

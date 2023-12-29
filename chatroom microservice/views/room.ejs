@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat With Others!</title>
+    <script>
+        const roomName = "<%= roomName %>"
+    </script>
+    <script defer src="http://localhost:7000/socket.io/socket.io.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        #message-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        #send-container {
+            display: flex;
+            align-items: center;
+            width: 60%;
+            gap: 5px;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        #send-button {
+            background-color: #101010;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: -15px;
+        }
+
+        #send-button:hover {
+            background-color: #131313;
+        }
+
+        #previous-page-button {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #previous-page-button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Chat with others!</h1>
+    <div id="message-container">Welcome :)&nbsp;</div>
+    <form id="send-container">
+        <input type="text" id="message-input">
+        <button type="submit" id="send-button">Send Message</button>
+    </form>
+    <button id="previous-page-button" onclick="goToPreviousPage()">Go back to rooms</button>
+
+    <script>
+        function goToPreviousPage() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>
