@@ -2,13 +2,23 @@ import React, { useState } from "react";
 import axios from "axios";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function Contact() {
   const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(false);
   // Notice this line (1)
   const [formData, setFormData] = useState({ name: "", email: "" });
   // Notice this line (2)
   const [message, setMessage] = useState(null);
+
+  // Secure the endpoints
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,33 +46,37 @@ function Contact() {
 
   return (
     <div className="App">
-      <h1>Contact Us</h1>
-      <button onClick={() => navigator(-1)}>Go Back</button>
-      {message}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-      </form>
-      <Footer></Footer>
+      {canAccess && (
+        <div>
+          <h1>Contact Us</h1>
+          <button onClick={() => navigator(-1)}>Go Back</button>
+          {message}
+          <form onSubmit={handleSubmit}>
+            <label>
+              Name:
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </label>
+            <br />
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </label>
+            <br />
+            <button type="submit">Submit</button>
+          </form>
+          <Footer></Footer>
+        </div>
+      )}
     </div>
   );
 }
