@@ -1,16 +1,17 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import Footer from "../Footer";
 
 export default function Login() {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const navigator = useNavigate();
-  const {setUserInfo} = useContext(UserContext); 
 
   async function handleSubmit(e) {
     e.preventDefault();
 
+    // Send request to login endpoint
     const apiUrl = "http://localhost:4000/login";
     const request = {
       method: "POST",
@@ -18,13 +19,12 @@ export default function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
-      credentials: "include",
     };
-
     const response = await fetch(apiUrl, request);
+
     if (response.status === 200) {
       const data = await response.json();
-      setUserInfo(data);
+      localStorage.setItem("authToken", data.token);
       navigator("/posts");
     } else {
       alert("Invalid Credentials!");
@@ -49,6 +49,7 @@ export default function Login() {
         />
         <button>Login</button>
       </form>
+      <Footer></Footer>
     </div>
   );
 }

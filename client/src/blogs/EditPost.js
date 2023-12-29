@@ -3,17 +3,25 @@ import { useEffect } from "react";
 import { useContext, useState } from "react";
 import ReactQuill from "react-quill";
 import { UserContext } from "../authentication/UserContext";
+import Footer from "../Footer";
 
 export default function EditPost() {
+  // Verifying if user is logged in or not
+  const { userInfo } = useContext(UserContext);
+  const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(null);
   const { postId } = useParams();
   const [title, setTitle] = useState(null);
   const [summary, setSummary] = useState(null);
   const [content, setContent] = useState(null);
   const [files, setFiles] = useState(null);
-  const { userInfo } = useContext(UserContext);
-  const navigator = useNavigate();
-
+  
   useEffect(() => {
+    if(!userInfo) {
+      navigator('/');
+    }
+    setCanAccess(true);
+
     const fetchData = async () => {
       const response = await fetch(`http://localhost:4000/posts/${postId}`);
       if (response.status === 200) {
@@ -53,27 +61,33 @@ export default function EditPost() {
 
   return (
     <div>
-      <h1>Edit post</h1>
-      <form onSubmit={updatePost}>
-        <input
-          type="title"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="summary"
-          placeholder="Summary"
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-        />
-        <input type="file" onChange={(e) => setFiles(e.target.files)} />
-        <ReactQuill
-          value={content}
-          onChange={(newValue) => setContent(newValue)}
-        />
-        <button style={{ marginTop: "5px" }}>Update</button>
-      </form>
+      {canAccess && (
+        <div>
+          <h1>Edit post</h1>
+          <button onClick={() => navigator(-1)}>Go Back</button>
+          <form onSubmit={updatePost}>
+            <input
+              type="title"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <input
+              type="summary"
+              placeholder="Summary"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+            />
+            <input type="file" onChange={(e) => setFiles(e.target.files)} />
+            <ReactQuill
+              value={content}
+              onChange={(newValue) => setContent(newValue)}
+            />
+            <button style={{ marginTop: "5px" }}>Update</button>
+            <Footer></Footer>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

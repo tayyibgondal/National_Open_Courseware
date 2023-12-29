@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import Post from "./Post";
 import useFetch from "../useFetch";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Footer from "../Footer";
 
 export default function IndexPage() {
+  const navigator = useNavigate();
   const [query, setQuery] = useState("");
-  const { data: posts, setData: setPosts } = useFetch(
+  const { data: posts, setData: setPosts, canAccess } = useFetch(
     "http://127.0.0.1:4000/posts"
   );
 
@@ -47,31 +49,38 @@ export default function IndexPage() {
   }
 
   return (
-    <div className="list-page">
-      <div class="edit-row">
-        <h1>Posts</h1>
-        <div>
-          <Link to={`/create`} className="create">
-            Create new post
-          </Link>
-        </div>
+    <div>
+      <div>
+        {canAccess && (
+          <div className="list-page">
+            <div className="edit-row">
+              <h1>Posts</h1>
+              <div>
+                <Link to={`/create`} className="create">
+                  Create new post
+                </Link>
+              </div>
+            </div>
+
+            <form className="search" onSubmit={searchPosts}>
+              <input
+                className="search"
+                type="text"
+                placeholder="Search blogs"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                id=""
+              />
+              <div>
+                <input type="submit" value="Search" />
+              </div>
+            </form>
+
+            {posts && posts.map((post) => <Post {...post} />)}
+            {posts && <Footer></Footer>}
+          </div>
+        )}
       </div>
-
-      <form className="search" onSubmit={searchPosts}>
-        <input
-          className="search"
-          type="text"
-          placeholder="Search blogs"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          id=""
-        />
-        <div>
-          <input type="submit" value="Search" />
-        </div>
-      </form>
-
-      {posts && posts.map((post) => <Post {...post} />)}
     </div>
   );
 }

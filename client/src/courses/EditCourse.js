@@ -3,8 +3,14 @@ import { useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // import styles
 import { useContext, useState } from "react";
+import { UserContext } from "../authentication/UserContext";
+import Footer from "../Footer";
+
 
 export default function EditCourse() {
+  const navigator = useNavigate();
+  const { userInfo } = useContext(UserContext);
+  const [canAccess, setCanAccess] = useState(null);
   const [name, setName] = useState("");
   const [instructor, setInstructor] = useState("");
   const [email, setEmail] = useState("");
@@ -12,10 +18,13 @@ export default function EditCourse() {
   const [year, setYear] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState(null);
-  const navigator = useNavigate();
   const { courseId } = useParams();
 
   useEffect(() => {
+    if (!userInfo) {
+      navigator("/");
+    }
+    setCanAccess(true);
     const fetchData = async () => {
       const response = await fetch(`http://localhost:4000/courses/${courseId}`);
       if (response.status === 200) {
@@ -62,47 +71,53 @@ export default function EditCourse() {
 
   return (
     <div>
-      <h1>Edit course information</h1>
-      <form onSubmit={updateCourse}>
-        <input
-          type="title"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Instructor"
-          value={instructor}
-          onChange={(e) => setInstructor(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="University"
-          value={university}
-          onChange={(e) => setUniversity(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Year"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-        />
-        <input type="file" onChange={(e) => setFiles(e.target.files)} />
-        <ReactQuill
-          value={description}
-          placeholder=" Add description"
-          onChange={(newValue) => setDescription(newValue)}
-        />
+      {canAccess && (
+        <div>
+          <h1>Edit course information</h1>
+          <button onClick={() => navigator(-1)}>Go Back</button>
+          <form onSubmit={updateCourse}>
+            <input
+              type="title"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Instructor"
+              value={instructor}
+              onChange={(e) => setInstructor(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="University"
+              value={university}
+              onChange={(e) => setUniversity(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Year"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+            />
+            <input type="file" onChange={(e) => setFiles(e.target.files)} />
+            <ReactQuill
+              value={description}
+              placeholder=" Add description"
+              onChange={(newValue) => setDescription(newValue)}
+            />
 
-        <button style={{ marginTop: "5px" }}>Update course details</button>
-      </form>
+            <button style={{ marginTop: "5px" }}>Update course details</button>
+          </form>
+          <Footer></Footer>
+        </div>
+      )}
     </div>
   );
 }

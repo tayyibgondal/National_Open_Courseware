@@ -2,17 +2,24 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { UserContext } from "../authentication/UserContext";
+import Footer from "../Footer";
 
 export default function BookEdit() {
+  const { userInfo } = useContext(UserContext);
+  const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(null);
   const { bookId } = useParams();
   const [title, setTitle] = useState(null);
   const [summary, setSummary] = useState(null);
   const [author, setAuthor] = useState(null);
   const [files, setFiles] = useState(null);
-  const { userInfo } = useContext(UserContext);
-  const navigator = useNavigate();
 
   useEffect(() => {
+    if (!userInfo) {
+      navigator('/');
+    }
+    setCanAccess(true);
+    
     const fetchData = async () => {
       const response = await fetch(`http://localhost:4000/library/${bookId}`);
       if (response.status === 200) {
@@ -50,32 +57,40 @@ export default function BookEdit() {
     }
   }
 
-    return (
-      <div>
-        <h1>Edit details</h1>
-        <form onSubmit={updateBook}>
-          <input
-            type="title"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <input
-            type="summary"
-            placeholder="Summary"
-            value={summary}
-            onChange={(e) => setSummary(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-          <input type="file" onChange={(e) => setFiles(e.target.files)} />
+  return (
+    <div>
+      {canAccess && (
+        <div>
+          <h1>Edit details</h1>
+          <button onClick={() => navigator(-1)}>Go Back</button>
+          <form onSubmit={updateBook}>
+            <input
+              type="title"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <input
+              type="summary"
+              placeholder="Summary"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="author"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+            <input type="file" onChange={(e) => setFiles(e.target.files)} />
 
-          <button style={{ marginTop: "5px" }}>Update book information</button>
-        </form>
-      </div>
-    );
+            <button style={{ marginTop: "5px" }}>
+              Update book information
+            </button>
+          </form>
+          <Footer></Footer>
+        </div>
+      )}
+    </div>
+  );
 }

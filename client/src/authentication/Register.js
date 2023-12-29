@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Footer from "../Footer";
 
 export default function Register() {
   const [username, setUsername] = useState(null);
@@ -43,6 +44,7 @@ export default function Register() {
         />
         <button>Register</button>
       </form>
+      <Footer></Footer>
     </div>
   );
 }

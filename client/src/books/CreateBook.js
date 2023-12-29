@@ -1,8 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../authentication/UserContext";
+import Footer from "../Footer";
+
 
 export default function BookCreate() {
+  // Verifying if user is logged in or note
+  const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(null);
+  useEffect(() => {
+    if (!userInfo) {
+      navigator("/");
+    }
+    setCanAccess(true); 
+  })
+
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [author, setAuthor] = useState("");
@@ -37,30 +51,36 @@ export default function BookCreate() {
 
   return (
     <div>
-      <h1>Add new book</h1>
-      <form onSubmit={createNewPost}>
-        <input
-          type="title"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="summary"
-          placeholder="Summary"
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-        />
-        <input type="file" onChange={(e) => setFiles(e.target.files)} />
+      {canAccess && (
+        <div>
+          <h1>Add new book</h1>
+          <button onClick={() => navigator(-1)}>Go Back</button>
+          <form onSubmit={createNewPost}>
+            <input
+              type="title"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <input
+              type="summary"
+              placeholder="Summary"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="author"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+            <input type="file" onChange={(e) => setFiles(e.target.files)} />
 
-        <button style={{ marginTop: "5px" }}>Add to library</button>
-      </form>
+            <button style={{ marginTop: "5px" }}>Add to library</button>
+          </form>
+          <Footer></Footer>
+        </div>
+      )}
     </div>
   );
 }

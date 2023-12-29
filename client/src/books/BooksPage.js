@@ -3,15 +3,34 @@ import Post from "./Book";
 import useFetch from "../useFetch";
 import { Link } from "react-router-dom";
 import Book from "./Book";
+import { UserContext } from "../authentication/UserContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Footer from "../Footer";
+
 
 export default function BooksPage() {
+  const navigator = useNavigate();
   const [query, setQuery] = useState("");
   const { data: books, setData: setBooks } = useFetch(
-    "http://127.0.0.1 :4000/library"
+    "http://127.0.0.1:4000/library"
   );
 
   async function searchBooks(e) {
     e.preventDefault();
+    if (!query.trim()) {
+      // If empty query made.
+      // Make a fetch req to /posts endpoint
+      const response = await fetch("http://localhost:4000/library");
+      if (response.ok) {
+        const newData = await response.json();
+        setBooks(newData);
+        console.log("done");
+      }
+      // setPosts(updatedPosts);
+      return;
+    }
+
     try {
       const apiUrl = `http://localhost:4000/library/search/${query}`;
       const response = await fetch(apiUrl);
@@ -27,10 +46,10 @@ export default function BooksPage() {
   }
   return (
     <div className="list-page-book">
-      <div class="edit-row">
+      <div className="edit-row">
         <h1>Library</h1>
         <div>
-          <Link to={`/library/create`} className="create">
+          <Link to={"/library/create"} className="create">
             Add new book
           </Link>
         </div>
@@ -50,6 +69,7 @@ export default function BooksPage() {
       </form>
 
       {books && books.map((book) => <Book {...book} />)}
+      {books && <Footer />}
     </div>
   );
 }

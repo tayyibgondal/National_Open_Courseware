@@ -18,6 +18,17 @@ import CreateCourse from "./courses/CreateCourse";
 import EditCourse from "./courses/EditCourse";
 import CourseDetails from "./courses/CourseDetailsPage";
 import Chat from "./chatbot/Chat";
+import CareerPath from "./career_paths/CareerPath";
+import CareerPathsPage from "./career_paths/CareerPathsPage";
+import CareerPathDetails from "./career_paths/CareerPathDetails";
+import CreateCareerPath from "./career_paths/CreateCareerPath";
+import EditCareerPath from "./career_paths/EditCareerPath";
+import Contact from "./contact/Contact";
+import FaqsPage from "./faqs/FaqsPage";
+import FaqDetails from "./faqs/FaqDetails";
+import CreateFaq from "./faqs/CreateFaq";
+import EditFaq from "./faqs/EditFaq";
+import Donate from "./donate/Donate";
 
 function App() {
   return (
@@ -53,9 +64,28 @@ function App() {
             path="/courses/edit/:courseId"
             element={<EditCourse />}
           ></Route>
-          {/* Routes for chatroom */}
+          {/* Route for donation */}
+          <Route path="/donate" element={<Donate />}></Route>
           {/* Ai tutor */}
           <Route path="/tutor" element={<Chat />}></Route>
+          {/* Career paths */}
+          <Route exact path="/careers" element={<CareerPathsPage />}></Route>
+          <Route
+            path="/careers/:careerId"
+            element={<CareerPathDetails />}
+          ></Route>
+          <Route path="/careers/create" element={<CreateCareerPath />}></Route>
+          <Route
+            path="/careers/edit/:careerId"
+            element={<EditCareerPath />}
+          ></Route>
+          {/* Contact */}
+          <Route path="/contact" element={<Contact />}></Route>
+          {/* Frequently asked questions */}
+          <Route path="/faqs" element={<FaqsPage />}></Route>
+          <Route path="/faqs/:faqId" element={<FaqDetails />}></Route>
+          <Route path="/faqs/create" element={<CreateFaq />}></Route>
+          <Route path="/faqs/edit/:faqId" element={<EditFaq />}></Route>
         </Routes>
       </main>
     </UserContextProvider>

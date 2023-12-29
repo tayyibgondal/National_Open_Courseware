@@ -1,7 +1,9 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // import styles
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../authentication/UserContext";
+import Footer from "../Footer";
 
 const modules = {
   toolbar: [
@@ -33,7 +35,18 @@ const formats = [
 ];
 
 export default function Create() {
+  // Verifying if user is logged in or note
+  const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(true);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
+
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
@@ -68,27 +81,35 @@ export default function Create() {
 
   return (
     <div>
-      <h1>Create new post</h1>
-      <form onSubmit={createNewPost}>
-        <input
-          type="title"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="summary"
-          placeholder="Summary"
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-        />
-        <input type="file" onChange={(e) => setFiles(e.target.files)} />
-        <ReactQuill
-          value={content}
-          onChange={(newValue) => setContent(newValue)}
-        />
-        <button style={{ marginTop: "5px" }}>Create</button>
-      </form>
+      {canAccess && (
+        <div>
+          <div>
+            <h1>Create new post</h1>
+            <button onClick={() => navigator(-1)}>Go Back</button>
+          </div>
+          <form onSubmit={createNewPost}>
+            <input
+              type="title"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <input
+              type="summary"
+              placeholder="Summary"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+            />
+            <input type="file" onChange={(e) => setFiles(e.target.files)} />
+            <ReactQuill
+              value={content}
+              onChange={(newValue) => setContent(newValue)}
+            />
+            <button style={{ marginTop: "5px" }}>Create</button>
+          </form>
+          <Footer></Footer>
+        </div>
+      )}
     </div>
   );
 }
