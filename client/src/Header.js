@@ -8,30 +8,13 @@ export default function Header() {
   const navigator = useNavigate();
   const [showFilesDropdown, setShowFilesDropdown] = useState(false);
 
-  useEffect(() => {
-    fetch("http://localhost:4000/verify_token", {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw new Error("Internal server error");
-      })
-      .then((data) => {
-        setUserInfo(data);
-      })
-      .catch((e) => {
-        setUserInfo(null);
-        console.log("Could not load cookie");
-      });
-  }, []);
-
   function logout() {
-    fetch("http://localhost:4000/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-    setUserInfo(null);
+    // fetch("http://localhost:4000/logout", {
+    //   method: "POST",
+    //   Authorization: localStorage.getItem("authToken")
+    // });
+    localStorage.clear();
+    setUserInfo(null);  // redundant
     navigator("/");
   }
 
@@ -40,13 +23,13 @@ export default function Header() {
       <Link to="/posts" className="logo">
         National Open Courseware
       </Link>
-      {!userInfo?.username && (
+      {!localStorage.getItem("id") && (
         <nav>
           <Link to="/">Login</Link>
           <Link to="/register">Register</Link>
         </nav>
       )}
-      {userInfo?.username && (
+      {localStorage.getItem("id") && (
         <nav>
           <Link to="/tutor" style={{ width: "90px" }}>
             Your Tutor
