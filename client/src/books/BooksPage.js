@@ -8,13 +8,21 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 
-
 export default function BooksPage() {
   const navigator = useNavigate();
   const [query, setQuery] = useState("");
+  const [canAccess, setCanAccess] = useState(false);
   const { data: books, setData: setBooks } = useFetch(
     "http://127.0.0.1:4000/library"
   );
+
+  // Make the endpoint secure
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   async function searchBooks(e) {
     e.preventDefault();
@@ -46,30 +54,33 @@ export default function BooksPage() {
   }
   return (
     <div className="list-page-book">
-      <div className="edit-row">
-        <h1>Library</h1>
+      {canAccess && (
         <div>
-          <Link to={"/library/create"} className="create">
-            Add new book
-          </Link>
+          {" "}
+          <div className="edit-row">
+            <h1>Library</h1>
+            <div>
+              <Link to={"/library/create"} className="create">
+                Add new book
+              </Link>
+            </div>
+          </div>
+          <form className="search" onSubmit={searchBooks}>
+            <input
+              className="search"
+              type="text"
+              placeholder="Search books"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <div>
+              <input type="submit" value="Search" />
+            </div>
+          </form>
+          {books && books.map((book) => <Book {...book} />)}
+          {books && <Footer />}
         </div>
-      </div>
-
-      <form className="search" onSubmit={searchBooks}>
-        <input
-          className="search"
-          type="text"
-          placeholder="Search books"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <div>
-          <input type="submit" value="Search" />
-        </div>
-      </form>
-
-      {books && books.map((book) => <Book {...book} />)}
-      {books && <Footer />}
+      )}
     </div>
   );
 }

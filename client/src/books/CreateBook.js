@@ -4,18 +4,19 @@ import { useContext } from "react";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
 
-
 export default function BookCreate() {
   // Verifying if user is logged in or note
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
   const [canAccess, setCanAccess] = useState(null);
+
+  // Make the endpoint secure
   useEffect(() => {
-    if (!userInfo) {
+    if (!localStorage.getItem("id")) {
       navigator("/");
     }
-    setCanAccess(true); 
-  })
+    setCanAccess(true);
+  });
 
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");

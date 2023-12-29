@@ -15,7 +15,7 @@ export default function BookEdit() {
   const [files, setFiles] = useState(null);
 
   useEffect(() => {
-    if (!userInfo) {
+    if(!localStorage.getItem('id')) {
       navigator('/');
     }
     setCanAccess(true);

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
@@ -11,8 +11,18 @@ import Footer from "../Footer";
 export default function BookDetails() {
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
+  // Can access variable allows us to save data to be leaked to unauthorized accounts momentarialy
+  const [canAccess, setCanAccess] = useState(false);
   const { bookId } = useParams();
   const { data } = useFetch(`http://localhost:4000/library/${bookId}`);
+
+  // Make the endpoint secure
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   async function handleDelete() {
     try {
@@ -33,7 +43,7 @@ export default function BookDetails() {
 
   return (
     <div className="book-page">
-      {data && (
+      {canAccess && data && (
         <div>
           <h1>{data.title}</h1>
           <button onClick={() => navigator(-1)}>Go Back</button>
