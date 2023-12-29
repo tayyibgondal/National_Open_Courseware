@@ -7,12 +7,19 @@ import Footer from "../Footer";
 
 export default function CareerPathsPage() {
   const [query, setQuery] = useState("");
-  // First of all fetch data (this also includes securing this endpoint)
-  const {
-    data: careerPaths,
-    setData: setCareerPaths,
-    canAccess,
-  } = useFetch("http://localhost:4000/careerpaths");
+  const [canAccess, setCanAccess] = useState(false);
+  // First of all fetch data
+  const { data: careerPaths, setData: setCareerPaths } = useFetch(
+    "http://localhost:4000/careerpaths"
+  );
+
+  // Secure the endpoints
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   async function searchCareerPaths(e) {
     e.preventDefault();

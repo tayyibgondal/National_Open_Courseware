@@ -6,7 +6,6 @@ import { useContext } from "react";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
 
-
 export default function EditCareerPath() {
   const navigator = useNavigate();
   const { userInfo } = useContext(UserContext);
@@ -16,8 +15,9 @@ export default function EditCareerPath() {
   const [files, setFiles] = useState(null);
   const { careerId } = useParams();
 
+  // Secure the endpoints
   useEffect(() => {
-    if (!userInfo) {
+    if (!localStorage.getItem("id")) {
       navigator("/");
     }
     setCanAccess(true);

@@ -1,7 +1,7 @@
 import { formatISO9075 } from "date-fns";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../useFetch";
 import { UserContext } from "../authentication/UserContext";
@@ -10,10 +10,16 @@ import Footer from "../Footer";
 export default function CareerPathDetails() {
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
+  const [canAccess, setCanAccess] = useState(false);
   const { careerId } = useParams();
-  const { data, canAccess } = useFetch(
-    `http://localhost:4000/careerpaths/${careerId}`
-  );
+  const { data } = useFetch(`http://localhost:4000/careerpaths/${careerId}`);
+
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    setCanAccess(true);
+  });
 
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
@@ -39,48 +45,48 @@ export default function CareerPathDetails() {
     }
   };
 
-    return (
-      <div>
-        {canAccess && data && (
-          <div className="course-details">
-            <div>
-              <h1>{data.title}</h1>
-              <button onClick={() => navigator(-1)}>Go Back</button>
-              <div
-                className="summary"
-                dangerouslySetInnerHTML={{ __html: data.description }}
-              />
-              <div className="download">
-                <a
-                  href={`http://localhost:4000/uploads/${
-                    data.file.split("\\")[1]
-                  }`}
-                  download
-                  target="_blank"
-                  className="button full-width"
-                >
-                  Click to download!
-                </a>
-              </div>
-
-              <div className="button-container">
-                <Link
-                  to={`/careers/edit/${careerId}`}
-                  className="button full-width Edit"
-                >
-                  Edit
-                </Link>
-                <button
-                  onClick={handleDelete}
-                  className="button full-width Delete"
-                >
-                  Delete
-                </button>
-              </div>
-              <Footer></Footer>
+  return (
+    <div>
+      {canAccess && data && (
+        <div className="course-details">
+          <div>
+            <h1>{data.title}</h1>
+            <button onClick={() => navigator(-1)}>Go Back</button>
+            <div
+              className="summary"
+              dangerouslySetInnerHTML={{ __html: data.description }}
+            />
+            <div className="download">
+              <a
+                href={`http://localhost:4000/uploads/${
+                  data.file.split("\\")[1]
+                }`}
+                download
+                target="_blank"
+                className="button full-width"
+              >
+                Click to download!
+              </a>
             </div>
+
+            <div className="button-container">
+              <Link
+                to={`/careers/edit/${careerId}`}
+                className="button full-width Edit"
+              >
+                Edit
+              </Link>
+              <button
+                onClick={handleDelete}
+                className="button full-width Delete"
+              >
+                Delete
+              </button>
+            </div>
+            <Footer></Footer>
           </div>
-        )}
-      </div>
-    );
+        </div>
+      )}
+    </div>
+  );
 }
