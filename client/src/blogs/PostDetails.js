@@ -70,7 +70,10 @@ export default function PostDetails() {
     }
   }
 
-  console.log("cond value" ,isAdmin || localStorage.getItem("id") == data?.author._id);
+  console.log(
+    "cond value",
+    isAdmin || localStorage.getItem("id") == data?.author._id
+  );
 
   return (
     <div>
@@ -102,7 +105,7 @@ export default function PostDetails() {
                     Delete
                   </a>
                 </div>
-              ):null}
+              ) : null}
 
               <h1>{displayedTitle}</h1>
               <div dangerouslySetInnerHTML={{ __html: displayedContent }} />

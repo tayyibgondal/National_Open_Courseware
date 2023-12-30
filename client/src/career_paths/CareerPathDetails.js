@@ -9,6 +9,7 @@ import Footer from "../Footer";
 
 export default function CareerPathDetails() {
   const { userInfo } = useContext(UserContext);
+  const isAdmin = localStorage.getItem('isAdmin');
   const navigator = useNavigate();
   const [canAccess, setCanAccess] = useState(false);
   const { careerId } = useParams();
@@ -69,20 +70,22 @@ export default function CareerPathDetails() {
               </a>
             </div>
 
-            <div className="button-container">
-              <Link
-                to={`/careers/edit/${careerId}`}
-                className="button full-width Edit"
-              >
-                Edit
-              </Link>
-              <button
-                onClick={handleDelete}
-                className="button full-width Delete"
-              >
-                Delete
-              </button>
-            </div>
+            {isAdmin && (
+              <div className="button-container">
+                <Link
+                  to={`/careers/edit/${careerId}`}
+                  className="button full-width Edit"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={handleDelete}
+                  className="button full-width Delete"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
             <Footer></Footer>
           </div>
         </div>

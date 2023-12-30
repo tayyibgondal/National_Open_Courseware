@@ -40,13 +40,6 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/posts" element={<IndexPage />} />
           <Route path="/register" element={<Register />} />
-          {/* ======================================== Faras's Part ===================================== */}
-          {/* For the following tasks if logged in user is admin, he/she can delete as well as view records */}
-          {/* Donate */}
-          {/* Career paths */}
-          {/* FAQs */}
-          {/* Contact us */}
-          {/* ======================================== Tayyib's Part ===================================== */}
           {/* Routes for blogs */}
           <Route path="/create" element={<Create />}></Route>
           <Route path="/post/:postId" element={<PostDetails />}></Route>

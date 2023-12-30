@@ -51,34 +51,36 @@ export default function CoursesPage() {
 
   return (
     <div>
-      {canAccess && (
-        <div className="list-page-book">
-          <div className="edit-row">
-            <h1>Courses</h1>
-            <div>
-              <Link to={`/courses/create`} className="create">
-                Add new course
-              </Link>
+      <div>
+        {canAccess && (
+          <div className="list-page-book">
+            <div className="edit-row">
+              <h1>Courses</h1>
+              <div>
+                <Link to={`/courses/create`} className="create">
+                  Add new course
+                </Link>
+              </div>
             </div>
+
+            <form className="search" onSubmit={searchCourses}>
+              <input
+                className="search"
+                type="text"
+                placeholder="Search courses"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <div>
+                <input type="submit" value="Search" />
+              </div>
+            </form>
+
+            {courses && courses.map((course) => <Course {...course} />)}
           </div>
-
-          <form className="search" onSubmit={searchCourses}>
-            <input
-              className="search"
-              type="text"
-              placeholder="Search courses"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <div>
-              <input type="submit" value="Search" />
-            </div>
-          </form>
-
-          {courses && courses.map((course) => <Course {...course} />)}
-          {courses && <Footer />}
-        </div>
-      )}
+        )}
+      </div>
+      {courses && <Footer />}
     </div>
   );
 }

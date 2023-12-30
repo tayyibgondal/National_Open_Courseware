@@ -6,7 +6,6 @@ export default function CareerPath({ _id, title, description, createdAt }) {
   return (
     <div className="career-path-card">
       <h2 className="career-path-title">{title}</h2>
-      <button onClick={() => navigator(-1)}>Go Back</button>
       <p className="career-path-info">
         <span className="info-label">Uploaded on:</span>{" "}
         {formatISO9075(new Date(createdAt))}
@@ -14,7 +13,6 @@ export default function CareerPath({ _id, title, description, createdAt }) {
       <Link to={`/careers/${_id}`} className="details-link">
         View Details
       </Link>
-      <Footer></Footer>
     </div>
   );
 }

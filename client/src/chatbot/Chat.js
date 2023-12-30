@@ -93,8 +93,8 @@ export default function Chat() {
     const apiUrl = "https://api.chatpdf.com/v1/chats/message";
     // Specify data
     const data = {
-      sourceId: "src_mX8I102536ZivxkYdV9js", // hard coding for now, change this to:
-      // sourceId: srcId,
+      // sourceId: "src_mX8I102536ZivxkYdV9js", // hard coding for now, change this to:
+      sourceId: srcId,
       messages: [
         {
           role: "user",
@@ -117,8 +117,9 @@ export default function Chat() {
       const apiResponse = await fetch(apiUrl, request);
       if (apiResponse.ok) {
         const apiData = await apiResponse.json();
+        console.log(apiData);
         setReply(apiData.content);
-        setDisplayedReply(reply);
+        setDisplayedReply(apiData.content);
         setBtnMsg("Can't understand? Translate to Urdu!");
         return;
       } else {
