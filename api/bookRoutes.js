@@ -42,20 +42,17 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
     const newPath = path + "." + ext;
     fs.renameSync(path, newPath);
 
-    const { token } = req.cookies;
-    jwt.verify(token, secretKey, {}, async (err, info) => {
-      if (err) res.status(401).json({ message: "Unauthorized" });
       // If no error in token verification
-      const { title, summary, author } = req.body;
+      const { title, summary, author, userId } = req.body;
       const book = await Book.create({
         title,
         summary,
         author,
         book: newPath,
-        uploader: info.id,
+        uploader: userId,
       });
       res.status(200).json({ message: "Book added!" });
-    });
+    
   } catch (e) {
     console.log(e);
   }
@@ -78,11 +75,7 @@ router.put(
         fs.renameSync(path, newPath);
       }
       // We need user id; also, we need to verify the user
-      const { token } = req.cookies;
-      jwt.verify(token, secretKey, {}, async (err, info) => {
-        if (err) res.status(401).json({ message: "Unauthorized" });
-        // If no error in token verification, proceed towards update
-        const { title, summary, author } = req.body;
+        const { title, summary, author, userId } = req.body;
         const bookOld = await Book.findById(bookId);
         // Use findByIdAndUpdate with the correct syntax
         const updatedBook = await Book.findByIdAndUpdate(
@@ -92,11 +85,11 @@ router.put(
             summary,
             author,
             book: newPath == null ? bookOld.book : newPath, // Keep the old cover if no new file is uploaded
+            userId
           },
           { new: true } // This option returns the modified document, not the original
         );
         res.status(200).json({ message: "Post updated!" });
-      });
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: "Internal server error!" });
