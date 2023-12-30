@@ -10,6 +10,7 @@ import Footer from "../Footer";
 export default function CourseDetails() {
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
+  const isAdmin = localStorage.getItem("isAdmin");
 
   const { courseId } = useParams();
   const { data } = useFetch(`http://localhost:4000/courses/${courseId}`);
@@ -63,14 +64,16 @@ export default function CourseDetails() {
               {data.year}
             </p>
             <div className="course-info">
-              <div className="edit-row">
-                <Link to={`/courses/edit/${data._id}`} className="Edit">
-                  Edit
-                </Link>
-                <button onClick={handleDelete} className="Delete">
-                  Delete
-                </button>
-              </div>
+              {isAdmin || localStorage.getItem("id") == data.uploader._id ? (
+                <div className="edit-row">
+                  <Link to={`/courses/edit/${data._id}`} className="Edit">
+                    Edit
+                  </Link>
+                  <button onClick={handleDelete} className="Delete">
+                    Delete
+                  </button>
+                </div>
+              ) : null}
               <h2>Description</h2>
               <div
                 className="summary"

@@ -64,6 +64,7 @@ export default function CreateCourse() {
     data.set("university", university);
     data.set("year", year);
     data.set("description", description);
+    data.set('userId', localStorage.getItem('id'))
     try {
       data.set("file", files[0]);
     } catch (err) {
