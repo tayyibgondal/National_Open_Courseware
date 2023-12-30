@@ -44,11 +44,7 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
     const newPath = path + "." + ext;
     fs.renameSync(path, newPath);
 
-    const { token } = req.cookies;
-    jwt.verify(token, secretKey, {}, async (err, info) => {
-      //   if (err) res.status(401).json({ message: "Unauthorized" });
-      // If no error in token verification
-      const { name, instructor, email, university, year, description } =
+      const { name, instructor, email, university, year, description, userId } =
         req.body;
       const course = await Course.create({
         name,
@@ -58,10 +54,9 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
         year,
         description,
         content: newPath,
-        uploader: info.id,
+        uploader: userId,
       });
       res.status(200).json({ message: "Course added!" });
-    });
   } catch (e) {
     console.log(e);
   }
@@ -83,11 +78,7 @@ router.put(
         newPath = path + "." + ext;
         fs.renameSync(path, newPath);
       }
-      // We need user id; also, we need to verify the user
-      const { token } = req.cookies;
-      jwt.verify(token, secretKey, {}, async (err, info) => {
-        // if (err) res.status(401).json({ message: "Unauthorized" });
-        // If no error in token verification, proceed towards update
+
         const { name, instructor, email, university, year, description } =
           req.body;
         const courseOld = await Course.findById(courseId);
@@ -106,7 +97,6 @@ router.put(
           { new: true } // This option returns the modified document, not the original
         );
         res.status(200).json({ message: "Post updated!" });
-      });
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: "Internal server error!" });
