@@ -42,13 +42,13 @@ router.post(
     fs.renameSync(path, newPath);
 
     // If no error in token verification
-    const { title, summary, content } = req.body;
+    const { title, summary, content, userId } = req.body;
     const postDoc = await Post.create({
       title,
       summary,
       content,
       cover: newPath,
-      author: req.user_ki_id,
+      author: userId,
     });
     res.status(200).json({ message: "Post created!" });
   }
@@ -92,14 +92,8 @@ router.put(
         fs.renameSync(path, newPath);
       }
 
-      const { title, summary, content } = req.body;
-
-      // Check if the current user is the author of the post or not
+      const { title, summary, content, userId } = req.body;
       const postDocOld = await Post.findById(postId);
-      console.log("This is old doc: ", postDocOld);
-      if (postDocOld.author._id != req.user_ki_id) {
-        res.status(401).json({ message: "Not authorized to update the post!" });
-      }
 
       // Use findByIdAndUpdate with the correct syntax
       const updatedPost = await Post.findByIdAndUpdate(
@@ -112,8 +106,7 @@ router.put(
         },
         { new: true } // This option returns the modified document, not the original
       );
-      console.log("This is updated document: ", updatedPost);
-      console.log("returning successfully...");
+
       res.status(200).json({ message: "Post updated!" });
     } catch (err) {
       res.status(500).json({ message: "Internal server error!" });
