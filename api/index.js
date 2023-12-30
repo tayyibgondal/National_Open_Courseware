@@ -69,6 +69,8 @@ app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     // Find user
     const userDoc = await User.findOne({ username });
+    let isAdmin = userDoc.isAdmin == true ? true : false;
+    console.log(isAdmin);
     // If we do find a user, then we see if passwords match or not
     const passwordTestResult = userDoc._id
       ? bcrypt.compareSync(password, userDoc.password)
@@ -84,7 +86,7 @@ app.post("/login", async (req, res) => {
           // To show or unshow website, we'll use token stored in local storage
           // To show specific buttons etc, we'll use the user id which we'll save as a context in frontend.
           // We can also use user id for both tasks
-          res.status(200).json({ token, id: userDoc._id });
+          res.status(200).json({ token, id: userDoc._id, isAdmin: isAdmin });
         }
       );
     } else {
@@ -102,6 +104,7 @@ app.post("/register", async (req, res) => {
     const user = await User.create({
       username: username,
       password: hashedPassword,
+      isAdmin: false,
     });
     res.status(200).json({ message: "User has been created!" });
   } catch (e) {

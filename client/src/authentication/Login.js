@@ -6,7 +6,7 @@ import Footer from "../Footer";
 export default function Login() {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
-  const {userInfo, setUserInfo} = useContext(UserContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const navigator = useNavigate();
 
   async function handleSubmit(e) {
@@ -26,8 +26,11 @@ export default function Login() {
     if (response.status === 200) {
       const data = await response.json();
       localStorage.setItem("authToken", data.token);
-      localStorage.setItem('id', data.id);
-      setUserInfo({id: data.id});  // This is redundant
+      localStorage.setItem("id", data.id);
+      if (data.isAdmin == true) {
+        localStorage.setItem("isAdmin", true);
+      }
+      setUserInfo({ id: data.id }); // This is redundant
       navigator("/posts");
     } else {
       alert("Invalid Credentials!");

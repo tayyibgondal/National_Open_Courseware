@@ -8,15 +8,15 @@ import translate from "translate";
 import Footer from "../Footer";
 
 export default function PostDetails() {
+  let isAdmin = localStorage.getItem("isAdmin");
+
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
   const { postId } = useParams();
   const [canAccess, setCanAccess] = useState();
   // Fetching the data
-  const { data, setData } = useFetch(
-    `http://localhost:4000/posts/${postId}`
-  );
-  // For translations  
+  const { data, setData } = useFetch(`http://localhost:4000/posts/${postId}`);
+  // For translations
   const [displayedTitle, setDisplayedTitle] = useState("");
   const [displayedContent, setDisplayedContent] = useState("");
   const [buttonText, setButtonText] = useState("Translate to Urdu");
@@ -70,6 +70,8 @@ export default function PostDetails() {
     }
   }
 
+  console.log("cond value" ,isAdmin || localStorage.getItem("id") == data?.author._id);
+
   return (
     <div>
       {canAccess && (
@@ -91,16 +93,17 @@ export default function PostDetails() {
                 />
               </div>
 
-              {localStorage.getItem("id") === data.author._id && (
-                <div class="edit-row">
+              {isAdmin || localStorage.getItem("id") == data.author._id ? (
+                <div className="edit-row">
                   <Link to={`/edit/${data._id}`} className="Edit">
                     Edit
                   </Link>
-                  <a href="" className="Edit" onClick={handleDelete}>
+                  <a href="#" className="Edit" onClick={handleDelete}>
                     Delete
                   </a>
                 </div>
-              )}
+              ):null}
+
               <h1>{displayedTitle}</h1>
               <div dangerouslySetInnerHTML={{ __html: displayedContent }} />
               <div className="author">By: {data.author.username}</div>
