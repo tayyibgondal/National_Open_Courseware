@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 export default function FaqsPage() {
+  const isAdmin = localStorage.getItem("isAdmin");
   const navigator = useNavigate();
   const { data: faqs, setData: setFaqs } = useFetch(
     "http://127.0.0.1:4000/faqs"
@@ -25,7 +26,8 @@ export default function FaqsPage() {
         <div className="list-page-faq">
           <h1>Frequently Asked Questions</h1>
           <button onClick={() => navigator(-1)}>Go Back</button>
-          <Link to="/faqs/create">Create a faq</Link>
+          {isAdmin && <Link to="/faqs/create">Create a faq</Link>}
+          {!isAdmin && <Link to="/faqs/create">Ask a question</Link>}
 
           {faqs && faqs.map((faq) => <FaqItem key={faq._id} {...faq} />)}
           {faqs && <Footer />}

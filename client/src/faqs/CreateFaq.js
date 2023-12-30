@@ -5,6 +5,13 @@ import { useEffect } from "react";
 import Footer from "../Footer";
 
 export default function CreateFaq() {
+  const isAdmin = localStorage.getItem("isAdmin");
+  let topRowMessage;
+  if( isAdmin)
+    topRowMessage = "Create a question";
+  else 
+    topRowMessage = "Aks a question";
+
   const navigator = useNavigate();
   const { userInfo } = useContext(UserContext);
   const [canAccess, setCanAccess] = useState(null);
@@ -45,7 +52,7 @@ export default function CreateFaq() {
     <div>
       {canAccess && (
         <div>
-          <h1>Add new FAQ</h1>
+          <h1>{topRowMessage}</h1>
           <button onClick={() => navigator(-1)}>Go Back</button>
           <form onSubmit={createNewFaq}>
             <input
@@ -54,11 +61,13 @@ export default function CreateFaq() {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
             />
-            <textarea
-              placeholder="Answer"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-            />
+            {isAdmin && (
+              <textarea
+                placeholder="Answer"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+              />
+            )}
             <button style={{ marginTop: "5px" }}>Add FAQ</button>
           </form>
           <Footer></Footer>
