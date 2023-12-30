@@ -6,6 +6,7 @@ import "./Careers.css";
 import Footer from "../Footer";
 
 export default function CareerPathsPage() {
+  const isAdmin = localStorage.getItem('isAdmin');
   const [query, setQuery] = useState("");
   const [canAccess, setCanAccess] = useState(false);
   // First of all fetch data
@@ -56,11 +57,13 @@ export default function CareerPathsPage() {
         <div className="list-page-career-path">
           <div className="edit-row">
             <h1>Career Paths</h1>
-            <div>
-              <Link to={`/careers/create`} className="create">
-                Add new career path
-              </Link>
-            </div>
+            {isAdmin && (
+              <div>
+                <Link to={`/careers/create`} className="create">
+                  Add new career path
+                </Link>
+              </div>
+            )}
           </div>
 
           <form className="search" onSubmit={searchCareerPaths}>
