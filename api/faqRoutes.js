@@ -14,6 +14,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Get all unanswered FAQs
+router.get("/unanswered", async (req, res) => {
+  try {
+    const unanswered = await Faq.find({ answer: null });
+    res.json(unanswered);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 // Get a single FAQ by ID
 router.get("/:faqId", async (req, res) => {
   try {
