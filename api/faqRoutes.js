@@ -17,7 +17,9 @@ router.get("/", async (req, res) => {
 // Get all unanswered FAQs
 router.get("/unanswered", async (req, res) => {
   try {
-    const unanswered = await Faq.find({ answer: null });
+    const unanswered = await Faq.find({
+      answer: { $in: [null, ""] },
+    });
     res.json(unanswered);
   } catch (e) {
     console.log(e);

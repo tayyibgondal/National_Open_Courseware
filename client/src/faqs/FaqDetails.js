@@ -9,6 +9,7 @@ import Footer from "../Footer";
 import { useEffect } from "react";
 
 export default function FaqDetails() {
+  const isAdmin = localStorage.getItem("isAdmin");
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
   const { faqId } = useParams();
@@ -48,19 +49,29 @@ export default function FaqDetails() {
             <h1>{data.question}</h1>
             <button onClick={() => navigator(-1)}>Go Back</button>
             <p>
-              Answer:&nbsp;
-              {data.answer}
+              {!data.answer && <h3>Unanswered</h3>}
+              {data.answer && (
+                <div>
+                  Answer:&nbsp;
+                  {data.answer}
+                </div>
+              )}
             </p>
-            <div className="faq-info">
-              <div className="edit-row">
-                <Link to={`/faqs/edit/${faqId}`} className="Edit">
-                  Edit
-                </Link>
-                <button onClick={handleDelete} className="Delete">
-                  Delete
-                </button>
+            {/* Only admins can see the edit and delete buttons */}
+            {isAdmin && (
+              <div>
+                <div className="faq-info">
+                  <div className="edit-row">
+                    <Link to={`/faqs/edit/${faqId}`} className="Edit">
+                      Edit
+                    </Link>
+                    <button onClick={handleDelete} className="Delete">
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <Footer></Footer>
         </div>
