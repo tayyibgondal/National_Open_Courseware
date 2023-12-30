@@ -28,7 +28,7 @@ export default function FaqsPage() {
           <button onClick={() => navigator(-1)}>Go Back</button>
           {isAdmin && <Link to="/faqs/create">Create a faq</Link>}
           {!isAdmin && <Link to="/faqs/create">Ask a question</Link>}
-
+          
           {faqs && faqs.map((faq) => <FaqItem key={faq._id} {...faq} />)}
           {faqs && <Footer />}
         </div>
