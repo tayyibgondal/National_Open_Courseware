@@ -7,8 +7,8 @@ import { UserContext } from "../authentication/UserContext";
 import { useState } from "react";
 import Footer from "../Footer";
 
-
 export default function BookDetails() {
+  const isAdmin = localStorage.getItem("isAdmin");
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
   // Can access variable allows us to save data to be leaked to unauthorized accounts momentarialy
@@ -51,40 +51,37 @@ export default function BookDetails() {
             Author:&nbsp;
             {data.author}
           </p>
-          {true && (
-            <div>
-              <div className="edit-row">
-                <Link to={`/library/edit/${data._id}`} className="Edit">
-                  Edit
-                </Link>
-                <button onClick={handleDelete} className="Delete">
-                  Delete
-                </button>
-              </div>
 
-              <div className="summary">{data.summary}</div>
-              <div className="author">
-                By:&nbsp;
-                {data.uploader.username}
-              </div>
-              <time>
-                Created at:&nbsp;
-                {formatISO9075(data.createdAt)}
-              </time>
-              <div className="download">
-                <a
-                  href={`http://localhost:4000/uploads/${
-                    data.book.split("\\")[1]
-                  }`}
-                  download
-                  target="_blank"
-                >
-                  Click to download!
-                </a>
-              </div>
-              <Footer></Footer>
+          {isAdmin || localStorage.getItem("id") == data.uploader._id ? (
+            <div className="edit-row">
+              <Link to={`/library/edit/${data._id}`} className="Edit">
+                Edit
+              </Link>
+              <button onClick={handleDelete} className="Delete">
+                Delete
+              </button>
             </div>
-          )}
+          ) : null}
+
+          <div className="summary">{data.summary}</div>
+          <div className="author">
+            By:&nbsp;
+            {data.uploader.username}
+          </div>
+          <time>
+            Created at:&nbsp;
+            {formatISO9075(data.createdAt)}
+          </time>
+          <div className="download">
+            <a
+              href={`http://localhost:4000/uploads/${data.book.split("\\")[1]}`}
+              download
+              target="_blank"
+            >
+              Click to download!
+            </a>
+          </div>
+          <Footer></Footer>
         </div>
       )}
     </div>

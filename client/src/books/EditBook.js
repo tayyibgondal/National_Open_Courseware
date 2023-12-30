@@ -15,11 +15,11 @@ export default function BookEdit() {
   const [files, setFiles] = useState(null);
 
   useEffect(() => {
-    if(!localStorage.getItem('id')) {
-      navigator('/');
+    if (!localStorage.getItem("id")) {
+      navigator("/");
     }
     setCanAccess(true);
-    
+
     const fetchData = async () => {
       const response = await fetch(`http://localhost:4000/library/${bookId}`);
       if (response.status === 200) {
@@ -42,6 +42,7 @@ export default function BookEdit() {
     formData.set("summary", summary);
     formData.set("author", author);
     formData.set("file", files?.[0]);
+    formData.set("userId", localStorage.getItem("id"));
 
     const apiUrl = `http://localhost:4000/library/edit/${bookId}`;
     const request = {

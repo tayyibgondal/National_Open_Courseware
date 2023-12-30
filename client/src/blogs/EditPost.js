@@ -46,6 +46,8 @@ export default function EditPost() {
     formData.set("summary", summary);
     formData.set("content", content);
     formData.set("file", files?.[0]);
+    formData.set("userId", localStorage.getItem('id'));
+    
 
     const apiUrl = `http://localhost:4000/posts/edit/${postId}`;
     const request = {

@@ -29,6 +29,7 @@ export default function BookCreate() {
     data.set("title", title);
     data.set("summary", summary);
     data.set("author", author);
+    data.set("userId", localStorage.getItem('id'));
     try {
       data.set("file", files[0]);
     } catch (err) {

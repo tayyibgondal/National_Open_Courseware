@@ -40,14 +40,14 @@ export default function Create() {
   const navigator = useNavigate();
   const [canAccess, setCanAccess] = useState(true);
 
-useEffect(() => {
-  // SECURE THE ENDPOINT
-  if (!localStorage.getItem("id")) {
-    navigator("/");
-  }
-  // Otherwise set canAccess to true.
-  setCanAccess(true);
-})
+  useEffect(() => {
+    // SECURE THE ENDPOINT
+    if (!localStorage.getItem("id")) {
+      navigator("/");
+    }
+    // Otherwise set canAccess to true.
+    setCanAccess(true);
+  });
 
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -60,6 +60,7 @@ useEffect(() => {
     data.set("title", title);
     data.set("summary", summary);
     data.set("content", content);
+    data.set("userId", localStorage.getItem("id"));
     try {
       data.set("file", files[0]);
     } catch (e) {
