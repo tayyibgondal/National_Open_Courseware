@@ -5,12 +5,15 @@
 
 body {
   color: #222;
+  background-color: #ffffff;
 }
 
 main {
   padding: 10px;
   margin: 0 auto;
   max-width: 730px;
+  min-height: calc(100vh - 20px); /* Subtracting the sum of padding and margin */
+  box-sizing: border-box;
 }
 
 header {
@@ -277,6 +280,7 @@ div.book .summary {
 /* Course.css */
 
 .course-card {
+  max-width: 730px;
   border: 1px solid #ccc;
   padding: 16px;
   margin: 16px;
@@ -302,7 +306,7 @@ div.book .summary {
 .details-link {
   display: block;
   margin-top: 12px;
-  color: #0b51f3;
+  color: #191919;
   text-decoration: none;
   font-weight: bold;
 }
@@ -417,9 +421,8 @@ div.book .summary {
   max-width: 730px;
   margin: auto;
   padding: 20px;
-  background-color: #f2f2f2;
+
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(77, 76, 76, 0.1);
 }
 
 .tutor h1 {
@@ -531,62 +534,3 @@ div.book .summary {
   flex-direction: column;
 }
 
-/* =================== */
-/* Footer styles */
-.footer {
-  width: 100%;
-  background-color: #202020;
-  color: #f2f2f2;
-  border-radius: 3px;
-  box-shadow: #202020;
-  padding: 20px;
-  /* Add padding to create space between content and borders */
-  box-sizing: border-box;
-  /* Include padding in the total width and height */
-}
-
-.heading-footer {
-  font-size: 1.7rem;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.buttons-footer {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.blue-button,
-.blue-button-reverse {
-  background-color: #ffffff;
-  color: #000000;
-  padding: 10px 20px;
-  text-decoration: none;
-  width: 150px;
-  text-align: center;
-  border-radius: 4px;
-  font-size: 1.2rem;
-}
-
-.blue-button:hover,
-.blue-button-reverse:hover {
-  background-color: rgb(186, 148, 148);
-}
-
-.blue-button-reverse {
-  background-color: #654e4e;
-  color: #ffffff;
-}
-
-.detail-footer {
-  padding: 20px;
-}
-
-.cr {
-  float: right;
-  margin-top: auto;
-  color: #fff;
-} 

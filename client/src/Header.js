@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./authentication/UserContext";
 import "./Header.css";
@@ -9,41 +9,37 @@ export default function Header() {
   const [showFilesDropdown, setShowFilesDropdown] = useState(false);
 
   function logout() {
-    // fetch("http://localhost:4000/logout", {
-    //   method: "POST",
-    //   Authorization: localStorage.getItem("authToken")
-    // });
     localStorage.clear();
-    setUserInfo(null);  // redundant
+    setUserInfo(null);
     navigator("/");
   }
 
   return (
-    <header>
+    <header className="header">
       <Link to="/posts" className="logo">
         National Open Courseware
       </Link>
       {!localStorage.getItem("id") && (
-        <nav>
+        <nav className="nav">
           <Link to="/">Login</Link>
           <Link to="/register">Register</Link>
         </nav>
       )}
       {localStorage.getItem("id") && (
-        <nav>
+        <nav className="nav">
           <Link to="/tutor" style={{ width: "90px" }}>
-            Your Tutor
+            AI Tutor
           </Link>
           <Link to="/courses">Courses</Link>
           <Link to="/library">Library</Link>
           <div
-            className="files-dropdown"
+            className="dropdown"
             onMouseEnter={() => setShowFilesDropdown(true)}
             onMouseLeave={() => setShowFilesDropdown(false)}
           >
             <span>More</span>
             {showFilesDropdown && (
-              <div className="files-dropdown-content vertical">
+              <div className="dropdown-content vertical">
                 <Link to="/posts">Blogs</Link>
                 <Link to="/careers">Career Paths</Link>
                 <Link to="/donate">Donate</Link>

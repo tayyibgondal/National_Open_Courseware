@@ -31,6 +31,9 @@ import EditFaq from "./faqs/EditFaq";
 import Donate from "./donate/Donate";
 
 function App() {
+  window.addEventListener("load", function() {
+    document.body.classList.add("loaded");
+  });
   return (
     <UserContextProvider>
       <main>
