@@ -49,20 +49,41 @@ export default function PostDetails() {
     }
   }
 
+  function extractTextFromHtml(htmlContent) {
+    // Create a new DOMParser
+    const parser = new DOMParser();
+    // Parse the HTML content into a document
+    const doc = parser.parseFromString(htmlContent, "text/html");
+    // Extract text content from the document's body
+    const textContent = doc.body.textContent || doc.body.innerText;
+    // Return the extracted text content
+    return textContent;
+  }
+
   // Function to translate the content and title
   async function translateText() {
     translate.engine = process.env.REACT_APP_TRANSLATE_ENGINE;
     translate.key = process.env.REACT_APP_TRANSLATE_KEY;
-    console.log(process.env.TRANSLATE_ENGINE, process.env.TRANSLATE_KEY);
+
     try {
-      if (buttonText == "Translate to Urdu") {
+      if (buttonText === "Translate to Urdu") {
         setButtonText("Translate to English");
-        const transTitle = await translate(data.title, "ur");
-        const transContent = await translate(data.content, "ur");
+
+        // Extract text from HTML before translation
+        const plainTextTitle = extractTextFromHtml(data.title);
+        const plainTextContent = extractTextFromHtml(data.content);
+
+        // Translate plain text
+        const transTitle = await translate(plainTextTitle, "ur");
+        const transContent = await translate(plainTextContent, "ur");
+
+        // Set translated content
         setDisplayedContent(transContent);
         setDisplayedTitle(transTitle);
       } else {
         setButtonText("Translate to Urdu");
+
+        // Reset to original content
         setDisplayedContent(data.content);
         setDisplayedTitle(data.title);
       }
