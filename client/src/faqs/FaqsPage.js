@@ -4,6 +4,7 @@ import FaqItem from "./FaqItem";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import './details.css'
 
 export default function FaqsPage() {
   const isAdmin = localStorage.getItem("isAdmin");
@@ -36,17 +37,18 @@ export default function FaqsPage() {
 
   return (
     <div>
+      <h1>Frequently Asked Questions</h1>
       {canAccess && (
         <div className="list-page-faq">
-          <h1>Frequently Asked Questions</h1>
-          <button onClick={() => navigator(-1)}>Go Back</button>
-          {isAdmin && (
-            <div>
-              <Link to="/faqs/create">Create a faq</Link>
-              <button onClick={showUnanswered}>View unanswered faqs</button>
-            </div>
-          )}
-          {!isAdmin && <Link to="/faqs/create">Ask a question</Link>}
+          <div className="button-wrapper">
+            {isAdmin && (
+              <div>
+                <Link to="/faqs/create" className="create-faq-link">Create a FAQ</Link>
+                <button onClick={showUnanswered} className="unanswered-faqs-button">View Unanswered FAQs</button>
+              </div>
+            )}
+            {!isAdmin && <Link to="/faqs/create" className="ask-question-link">Ask a Question</Link>}
+          </div>
           {message}
           {faqs && faqs.map((faq) => <FaqItem key={faq._id} {...faq} />)}
           {faqs && <Footer />}

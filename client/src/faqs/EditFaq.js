@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
+import "./faq-form.css";
 
 export default function EditFaq() {
   const navigator = useNavigate();
@@ -57,7 +58,7 @@ export default function EditFaq() {
   return (
     <div>
       {canAccess && (
-        <div>
+        <div className="add-faq-container">
           <h1>Edit FAQ</h1>
           <button onClick={() => navigator(-1)}>Go Back</button>
           <form onSubmit={updateFaq}>

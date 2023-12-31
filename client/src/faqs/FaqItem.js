@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./faq-main.css";
 
 export default function FaqItem({ _id, question, answer, createdAt }) {
   const isAdmin = localStorage.getItem("isAdmin");

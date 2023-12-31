@@ -4,9 +4,9 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../useFetch";
 import { UserContext } from "../authentication/UserContext";
-import "./details.css";
 import Footer from "../Footer";
 import { useEffect } from "react";
+import "./faqs.css";
 
 export default function FaqDetails() {
   const isAdmin = localStorage.getItem("isAdmin");
@@ -44,10 +44,9 @@ export default function FaqDetails() {
   return (
     <div>
       {canAccess && data && (
-        <div className="faq-details">
+        <div className="faq-details-container">
           <div>
             <h1>{data.question}</h1>
-            <button onClick={() => navigator(-1)}>Go Back</button>
             <p>
               {!data.answer && <h3>Unanswered</h3>}
               {data.answer && (
@@ -73,9 +72,10 @@ export default function FaqDetails() {
               </div>
             )}
           </div>
-          <Footer></Footer>
+<button onClick={() => navigator(-1)}>Go Back</button>
         </div>
       )}
+      <Footer></Footer>
     </div>
   );
 }
