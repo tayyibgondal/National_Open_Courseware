@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import { useContext } from "react";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
+import './forms.css'
 
 export default function EditCareerPath() {
   const navigator = useNavigate();
@@ -81,7 +82,7 @@ export default function EditCareerPath() {
   }
 
   return (
-    <div>
+    <div className="add-career-path-container">
       {canAccess && (
         <div>
           <h1>Edit career path information</h1>

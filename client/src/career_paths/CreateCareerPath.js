@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../authentication/UserContext";
 import { useEffect } from "react";
 import Footer from "../Footer";
+import './forms.css'
 
 const modules = {
   toolbar: [
@@ -81,7 +82,7 @@ export default function CreateCareerPath() {
   }
 
   return (
-    <div>
+    <div className="add-career-path-container">
       {canAccess && (
         <div>
           <h1>Add new career path</h1>

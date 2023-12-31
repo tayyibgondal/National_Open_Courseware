@@ -48,27 +48,15 @@ export default function CareerPathDetails() {
 
   return (
     <div>
+      <button onClick={() => navigator(-1)} style={{marginBottom: "20px"}}>Go Back</button>
       {canAccess && data && (
         <div className="course-details">
           <div>
             <h1>{data.title}</h1>
-            <button onClick={() => navigator(-1)}>Go Back</button>
             <div
               className="summary"
               dangerouslySetInnerHTML={{ __html: data.description }}
             />
-            <div className="download">
-              <a
-                href={`http://localhost:4000/uploads/${
-                  data.file.split("\\")[1]
-                }`}
-                download
-                target="_blank"
-                className="button full-width"
-              >
-                Click to download!
-              </a>
-            </div>
 
             {isAdmin && (
               <div className="button-container">
@@ -86,10 +74,22 @@ export default function CareerPathDetails() {
                 </button>
               </div>
             )}
-            <Footer></Footer>
+            <div className="download">
+              <a
+                href={`http://localhost:4000/uploads/${
+                  data.file.split("\\")[1]
+                }`}
+                download
+                target="_blank"
+                className="button full-width"
+              >
+                Click to download!
+              </a>
+            </div>
           </div>
         </div>
       )}
+      <Footer></Footer>
     </div>
   );
 }
