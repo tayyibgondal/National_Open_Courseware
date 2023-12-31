@@ -2,6 +2,7 @@ import { useState } from "react";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import "./donate.css"
 
 export default function Donate() {
   const navigator = useNavigate();
@@ -72,7 +73,7 @@ export default function Donate() {
   }
 
   return (
-    <section className="forms">
+    <section className="forms-container">
       {canAccess && (
         <div>
           <div>{msg}</div>
