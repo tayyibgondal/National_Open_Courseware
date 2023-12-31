@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
+import "./books.css"
 
 export default function BookEdit() {
   const { userInfo } = useContext(UserContext);
@@ -59,7 +60,7 @@ export default function BookEdit() {
   }
 
   return (
-    <div>
+    <div className="edit-details-container">
       {canAccess && (
         <div>
           <h1>Edit details</h1>

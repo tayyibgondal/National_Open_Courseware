@@ -52,7 +52,7 @@ export default function BookCreate() {
   }
 
   return (
-    <div>
+    <div className="add-book-container">
       {canAccess && (
         <div>
           <h1>Add new book</h1>

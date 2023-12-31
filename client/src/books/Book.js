@@ -1,5 +1,6 @@
 import { formatISO9075 } from 'date-fns';
 import {Link} from "react-router-dom";
+import './book.css'
 
 export default function Book({ _id, title, summary, author, uploader, book, createdAt }) {
   return (

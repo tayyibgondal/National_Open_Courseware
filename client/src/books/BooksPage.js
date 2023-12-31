@@ -53,34 +53,35 @@ export default function BooksPage() {
     }
   }
   return (
-    <div className="list-page-book">
-      {canAccess && (
-        <div>
-          {" "}
-          <div className="edit-row">
-            <h1>Library</h1>
-            <div>
-              <Link to={"/library/create"} className="create">
-                Add new book
-              </Link>
+    <div>
+      <div className="list-page-book">
+        {canAccess && (
+          <div>
+            <div className="edit-row">
+              <h1>Library</h1>
+              <div>
+                <Link to="/library/create" className="create">
+                  Add new book
+                </Link>
+              </div>
             </div>
+            <form className="search" onSubmit={searchBooks}>
+              <input
+                className="search"
+                type="text"
+                placeholder="Search books"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <div>
+                <input type="submit" value="Search" />
+              </div>
+            </form>
+            {books && books.map((book) => <Book key={book.id} {...book} />)}
           </div>
-          <form className="search" onSubmit={searchBooks}>
-            <input
-              className="search"
-              type="text"
-              placeholder="Search books"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <div>
-              <input type="submit" value="Search" />
-            </div>
-          </form>
-          {books && books.map((book) => <Book {...book} />)}
-          {books && <Footer />}
-        </div>
-      )}
+        )}
+      </div>
+        {books && <Footer />}
     </div>
   );
 }
