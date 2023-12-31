@@ -3,6 +3,7 @@ import axios from "axios";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import './contact.css'
 
 function Contact() {
   const navigator = useNavigate();
@@ -45,7 +46,7 @@ function Contact() {
   };
 
   return (
-    <div className="App">
+    <div className="contact-container">
       {canAccess && (
         <div>
           <h1>Contact Us</h1>
