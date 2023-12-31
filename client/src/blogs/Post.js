@@ -1,5 +1,6 @@
 import { formatISO9075 } from 'date-fns';
 import {Link} from "react-router-dom";
+import "./PostCard.css"
 
 export default function Post({ _id, title, summary, cover, content, createdAt, author }) {
   return (
