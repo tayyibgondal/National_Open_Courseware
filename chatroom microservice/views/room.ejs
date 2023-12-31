@@ -22,8 +22,19 @@
             justify-content: center;
             height: 100vh;
             position: relative;
+            background-image: url('/chatroom.png'); /* Set the background image path */
+            background-size: center; 
+             background-color: #0e0008;
         }
 
+          h1 {
+              font-size: 2.5rem;
+              background: linear-gradient(to right, #ffffff, #880202); 
+              margin-bottom: 20px;
+              -webkit-background-clip: text; /* This is used for webkit browsers (Chrome, Safari) */
+              color: transparent; /* Make the text transparent, showing the background gradient */
+        }
+        
         #message-container {
             display: flex;
             flex-direction: column;
