@@ -64,7 +64,7 @@ export default function EditPost() {
   }
 
   return (
-    <div>
+    <div className="edit-post-container">
       {canAccess && (
         <div>
           <h1>Edit post</h1>
@@ -87,9 +87,9 @@ export default function EditPost() {
               value={content}
               onChange={(newValue) => setContent(newValue)}
             />
-            <button style={{ marginTop: "5px" }}>Update</button>
-            <Footer></Footer>
+            <button style={{ marginTop: "20px" }}>Update</button>
           </form>
+          <Footer></Footer>
         </div>
       )}
     </div>

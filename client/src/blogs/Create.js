@@ -83,14 +83,14 @@ export default function Create() {
   }
 
   return (
+    <div className="create-post-container">
+  {canAccess && (
     <div>
-      {canAccess && (
-        <div>
-          <div>
-            <h1>Create new post</h1>
-            <button onClick={() => navigator(-1)}>Go Back</button>
-          </div>
-          <form onSubmit={createNewPost}>
+      <div>
+        <h1>Create new post</h1>
+        <button onClick={() => navigator(-1)}>Go Back</button>
+      </div>
+      <form onSubmit={createNewPost}>
             <input
               type="title"
               placeholder="Title"
@@ -110,9 +110,8 @@ export default function Create() {
             />
             <button style={{ marginTop: "5px" }}>Create</button>
           </form>
-          <Footer></Footer>
-        </div>
-      )}
+      <Footer></Footer>
     </div>
-  );
+  )}
+</div>)
 }

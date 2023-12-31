@@ -11,7 +11,7 @@ export default function Post({ _id, title, summary, cover, content, createdAt, a
         <Link to={`/post/${_id}`}>{title}</Link>
         <p className="info">
           <a className="author">By: {author.username}</a>
-          <time>{formatISO9075(createdAt)}</time>
+          {/* {<time>{formatISO9075(createdAt)}</time>} */}
         </p>
       </div>
     </div>

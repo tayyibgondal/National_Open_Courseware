@@ -6,6 +6,7 @@ import useFetch from "../useFetch";
 import { UserContext } from "../authentication/UserContext";
 import translate from "translate";
 import Footer from "../Footer";
+import './Post.css'
 
 export default function PostDetails() {
   let isAdmin = localStorage.getItem("isAdmin");
@@ -81,11 +82,7 @@ export default function PostDetails() {
         <div className="post-page">
           {data && (
             <div>
-              <button onClick={() => navigator(-1)}>Go Back</button>
               <div className="edit-row translate">
-                <button className="Edit" onClick={translateText}>
-                  {buttonText}
-                </button>
               </div>
               <div className="image">
                 <img
@@ -108,14 +105,23 @@ export default function PostDetails() {
               ) : null}
 
               <h1>{displayedTitle}</h1>
+                <button className="Edit" onClick={translateText} style={{marginTop: "10px", marginBottom: '10px'}}>
+                  {buttonText}
+                </button>
               <div dangerouslySetInnerHTML={{ __html: displayedContent }} />
               <div className="author">By: {data.author.username}</div>
               <time>{formatISO9075(data.createdAt)}</time>
-              <Footer></Footer>
+              <button
+                onClick={() => navigator(-1)}
+                style={{ marginBottom: "20px" }}
+              >
+                Go Back
+              </button>
             </div>
           )}
         </div>
       )}
+      <Footer></Footer>
     </div>
   );
 }
