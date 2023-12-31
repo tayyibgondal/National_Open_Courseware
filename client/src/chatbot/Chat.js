@@ -6,9 +6,9 @@ STEPS TO DO IF YOU WANT TO ACHIEVE TRANSLATION
 3. Make another state for showing translate button message.
 4. Now generally displayedContent = actual content. 
 5. When button is clicked, displayedContent = translated(actual content) or the actual content, depending upon the button msg.
-
 */
 
+import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
@@ -16,6 +16,8 @@ import { UserContext } from "../authentication/UserContext";
 import { useNavigate } from "react-router-dom";
 import translate from "translate";
 import Footer from "../Footer";
+import React from "react";
+import "./chat.css";
 
 export default function Chat() {
   const secretKey = process.env.REACT_APP_TUTOR_KEY;
@@ -186,43 +188,60 @@ export default function Chat() {
 
   return (
     <div>
-      {canAccess && (
-        <div className="tutor">
-          <div className="toprow">
-            <h1>Chat</h1>
-            <div>
-              <button onClick={() => navigator(-1)}>Go Back</button>
+      <div className="tutor-container">
+        {canAccess && (
+          <div className="tutor" style={{ textAlign: "center" }}>
+            <div className="toprow">
+              <h1>Chat</h1>
+              <div>
+                <Button variant="primary" onClick={() => navigator(-1)}>
+                  Go Back
+                </Button>
+              </div>
             </div>
-          </div>
-          <p>{message}</p>
-          <form onSubmit={handleUpload} className="upload-file-form">
-            <input type="file" onChange={(e) => setFiles(e.target.files)} />
-            <button>Give to Language model</button>
-          </form>
-
-          {uploaded && (
-            <form onSubmit={handleChat} className="chat-prompt-form">
-              <input
-                type="text"
-                placeholder="Prompt the tutor..."
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-              />
-              <input type="submit" value="Ask" />
+            <p>{message}</p>
+            <form onSubmit={handleUpload} className="upload-file-form">
+              <div className="file-input-container">
+                <label className="file-input-label">
+                  Choose a File
+                  <input type="file" className="file-input" onChange={(e) => setFiles(e.target.files)} />
+                  
+                </label>
+              </div>
+              <Button variant="primary">Give to Language model</Button>
             </form>
-          )}
 
-          {reply && (
-            <div className="response-section">
-              <h2>Response</h2>
-              <div className="response">{displayedReply}</div>
-              <button onClick={translateText} className="translateButton">
-                {btnMsg}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+            {uploaded && (
+              <form onSubmit={handleChat} className="chat-prompt-form">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Prompt the tutor..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                />
+                <Button variant="primary" type="submit">
+                  Ask
+                </Button>
+              </form>
+            )}
+
+            {reply && (
+              <div className="response-section">
+                <h2>Response</h2>
+                <div className="response">{displayedReply}</div>
+                <Button
+                  variant="primary"
+                  onClick={translateText}
+                  className="translateButton"
+                >
+                  {btnMsg}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
       <Footer></Footer>
     </div>
   );
