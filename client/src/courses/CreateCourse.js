@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../authentication/UserContext";
 import { useEffect } from "react";
 import Footer from "../Footer";
+import "./forms.css";
 
 const modules = {
   toolbar: [
@@ -64,7 +65,7 @@ export default function CreateCourse() {
     data.set("university", university);
     data.set("year", year);
     data.set("description", description);
-    data.set('userId', localStorage.getItem('id'))
+    data.set("userId", localStorage.getItem("id"));
     try {
       data.set("file", files[0]);
     } catch (err) {
@@ -89,53 +90,55 @@ export default function CreateCourse() {
 
   return (
     <div>
-      {canAccess && (
-        <div>
-          <h1>Add new course</h1>
-          <button onClick={() => navigator(-1)}>Go Back</button>
-          <form onSubmit={createNewCourse}>
-            <input
-              type="title"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Instructor"
-              value={instructor}
-              onChange={(e) => setInstructor(e.target.value)}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="University"
-              value={university}
-              onChange={(e) => setUniversity(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Year"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-            />
-            <input type="file" onChange={(e) => setFiles(e.target.files)} />
-            <ReactQuill
-              value={description}
-              placeholder=" Add description"
-              onChange={(newValue) => setDescription(newValue)}
-            />
+      <div className="add-career-path-container">
+        {canAccess && (
+          <div>
+            <h1>Add new course</h1>
+            <button onClick={() => navigator(-1)}>Go Back</button>
+            <form onSubmit={createNewCourse}>
+              <input
+                type="title"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Instructor"
+                value={instructor}
+                onChange={(e) => setInstructor(e.target.value)}
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="University"
+                value={university}
+                onChange={(e) => setUniversity(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Year"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              />
+              <input type="file" onChange={(e) => setFiles(e.target.files)} />
+              <ReactQuill
+                value={description}
+                placeholder=" Add description"
+                onChange={(newValue) => setDescription(newValue)}
+              />
 
-            <button style={{ marginTop: "5px" }}>Add to courseware</button>
-          </form>
-          <Footer></Footer>
-        </div>
-      )}
+              <button style={{ marginTop: "5px" }}>Add to courseware</button>
+            </form>
+          </div>
+        )}
+      </div>
+        <Footer></Footer>
     </div>
   );
 }

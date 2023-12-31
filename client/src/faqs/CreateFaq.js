@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../authentication/UserContext";
 import { useEffect } from "react";
 import Footer from "../Footer";
+import "./faq-form.css"
 
 export default function CreateFaq() {
   const isAdmin = localStorage.getItem("isAdmin");
@@ -51,7 +52,7 @@ export default function CreateFaq() {
   return (
     <div>
       {canAccess && (
-        <div>
+        <div className="add-faq-container">
           <h1>{topRowMessage}</h1>
           <button onClick={() => navigator(-1)}>Go Back</button>
           <form onSubmit={createNewFaq}>

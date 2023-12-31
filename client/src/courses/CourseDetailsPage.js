@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../useFetch";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
-
+import "./details.css";
+  
 export default function CourseDetails() {
   const { userInfo } = useContext(UserContext);
   const navigator = useNavigate();
@@ -42,67 +43,74 @@ export default function CourseDetails() {
 
   return (
     <div>
-      {canAccess && data && (
-        <div className="course-details">
-          <div>
-            <h1>{data.name}</h1>
-            <button onClick={() => navigator(-1)}>Go Back</button>
-            <p>
-              Instructor:&nbsp;
-              {data.instructor}
-            </p>
-            <p>
-              Email:&nbsp;
-              {data.email}
-            </p>
-            <p>
-              University:&nbsp;
-              {data.university}
-            </p>
-            <p>
-              Year:&nbsp;
-              {data.year}
-            </p>
-            <div className="course-info">
-              {isAdmin || localStorage.getItem("id") == data.uploader._id ? (
-                <div className="edit-row">
-                  <Link to={`/courses/edit/${data._id}`} className="Edit">
-                    Edit
-                  </Link>
-                  <button onClick={handleDelete} className="Delete">
-                    Delete
-                  </button>
+      <div>
+        {canAccess && data && (
+          <div className="course-details">
+            <div>
+              <h1>{data.name}</h1>
+              <p>
+                Instructor:&nbsp;
+                {data.instructor}
+              </p>
+              <p>
+                Email:&nbsp;
+                {data.email}
+              </p>
+              <p>
+                University:&nbsp;
+                {data.university}
+              </p>
+              <p>
+                Year:&nbsp;
+                {data.year}
+              </p>
+              <div className="course-info">
+                {isAdmin || localStorage.getItem("id") == data.uploader._id ? (
+                  <div className="edit-row">
+                    <Link to={`/courses/edit/${data._id}`} className="Edit">
+                      Edit
+                    </Link>
+                    <button onClick={handleDelete} className="Delete">
+                      Delete
+                    </button>
+                  </div>
+                ) : null}
+                <h2>Description</h2>
+                <div
+                  className="summary"
+                  dangerouslySetInnerHTML={{ __html: data.description }}
+                />
+                <div className="download">
+                  <a
+                    href={`http://localhost:4000/uploads/${
+                      data.content.split("\\")[1]
+                    }`}
+                    download
+                    target="_blank"
+                  >
+                    Click to download!
+                  </a>
                 </div>
-              ) : null}
-              <h2>Description</h2>
-              <div
-                className="summary"
-                dangerouslySetInnerHTML={{ __html: data.description }}
-              />
-              <div className="download">
-                <a
-                  href={`http://localhost:4000/uploads/${
-                    data.content.split("\\")[1]
-                  }`}
-                  download
-                  target="_blank"
-                >
-                  Click to download!
-                </a>
+                <div className="author">
+                  By:&nbsp;
+                  {data.uploader.username}
+                </div>
+                <time>
+                  Created at:&nbsp;
+                  {formatISO9075(new Date(data.createdAt))}
+                </time>
               </div>
-              <div className="author">
-                By:&nbsp;
-                {data.uploader.username}
-              </div>
-              <time>
-                Created at:&nbsp;
-                {formatISO9075(new Date(data.createdAt))}
-              </time>
             </div>
+            <button
+              onClick={() => navigator(-1)}
+              style={{ marginTop: "20px", marginBottom: "10px" }}
+            >
+              Go Back
+            </button>
           </div>
-          <Footer></Footer>
-        </div>
-      )}
+        )}
+      </div>
+      <Footer></Footer>
     </div>
   );
 }

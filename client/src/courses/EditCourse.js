@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css"; // import styles
 import { useContext, useState } from "react";
 import { UserContext } from "../authentication/UserContext";
 import Footer from "../Footer";
+import './forms.css'
 
 export default function EditCourse() {
   const navigator = useNavigate();
@@ -71,53 +72,57 @@ export default function EditCourse() {
 
   return (
     <div>
-      {canAccess && (
-        <div>
-          <h1>Edit course information</h1>
-          <button onClick={() => navigator(-1)}>Go Back</button>
-          <form onSubmit={updateCourse}>
-            <input
-              type="title"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Instructor"
-              value={instructor}
-              onChange={(e) => setInstructor(e.target.value)}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="University"
-              value={university}
-              onChange={(e) => setUniversity(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Year"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-            />
-            <input type="file" onChange={(e) => setFiles(e.target.files)} />
-            <ReactQuill
-              value={description}
-              placeholder=" Add description"
-              onChange={(newValue) => setDescription(newValue)}
-            />
+      <div className="add-career-path-container">
+        {canAccess && (
+          <div>
+            <h1>Edit course information</h1>
+            <button onClick={() => navigator(-1)}>Go Back</button>
+            <form onSubmit={updateCourse}>
+              <input
+                type="title"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Instructor"
+                value={instructor}
+                onChange={(e) => setInstructor(e.target.value)}
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="University"
+                value={university}
+                onChange={(e) => setUniversity(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Year"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              />
+              <input type="file" onChange={(e) => setFiles(e.target.files)} />
+              <ReactQuill
+                value={description}
+                placeholder=" Add description"
+                onChange={(newValue) => setDescription(newValue)}
+              />
 
-            <button style={{ marginTop: "5px" }}>Update course details</button>
-          </form>
-          <Footer></Footer>
-        </div>
-      )}
+              <button style={{ marginTop: "5px" }}>
+                Update course details
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+        <Footer></Footer>
     </div>
   );
 }
