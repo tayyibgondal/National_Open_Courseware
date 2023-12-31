@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import Footer from "../Footer";
+import "./auth.css";
 
 export default function Login() {
   const [username, setUsername] = useState(null);
@@ -39,23 +40,25 @@ export default function Login() {
 
   return (
     <div>
-      <form className="login" onSubmit={handleSubmit}>
-        <h1>Login</h1>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button>Login</button>
-      </form>
-      <Footer></Footer>
+      <div className="register-container">
+        <form className="login" onSubmit={handleSubmit}>
+          <h1>Login</h1>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button>Login</button>
+        </form>
+      </div>
+        <Footer></Footer>
     </div>
   );
 }

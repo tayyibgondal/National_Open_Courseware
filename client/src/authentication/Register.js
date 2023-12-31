@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Footer from "../Footer";
+import "./auth.css";
 
 export default function Register() {
   const [username, setUsername] = useState(null);
@@ -19,32 +20,33 @@ export default function Register() {
 
     const response = await fetch(apiUrl, request);
     if (response.status === 200) {
-      alert('Registration successful');
-    }
-    else {
+      alert("Registration successful");
+    } else {
       alert("Registration unsuccessful");
     }
   }
 
   return (
     <div>
-      <form className="register" onSubmit={handleSubmit}>
-        <h1>Register</h1>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button>Register</button>
-      </form>
-      <Footer></Footer>
+      <div className="register-container">
+        <form className="register" onSubmit={handleSubmit}>
+          <h1>Register</h1>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button>Register</button>
+        </form>
+      </div>
+        <Footer></Footer>
     </div>
   );
 }
