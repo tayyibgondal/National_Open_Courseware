@@ -117,6 +117,7 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("OK");
 });
 
+// ============================================================
 // End point that forwards client's request to chatPDF
 // app.post("/chatpdf-request", async (req, res) => {
 //   const apiUrl = "https://api.chatpdf.com/v1/chats/message";
@@ -147,30 +148,30 @@ app.post("/logout", (req, res) => {
 //     res.status(500).json({ error: "Internal server error" });
 //   }
 // });
+// ===========================================================
+// app.post("/chatpdf-request", async (req, res) => {
+//   console.log(req.body);
+//   const apiUrl = "https://api.chatpdf.com/v1/chats/message";
 
-app.post("/chatpdf-request", async (req, res) => {
-  console.log(req.body);
-  const apiUrl = "https://api.chatpdf.com/v1/chats/message";
+//   // const headers = {
+//   //   "Content-Type": "application/json",
+//   //   "x-api-key": "sec_w2zWAPuDvDlR8K1vx0mdIeXCjzMVC5fI",
+//   // };
 
-  const headers = {
-    "Content-Type": "application/json",
-    "x-api-key": "sec_w2zWAPuDvDlR8K1vx0mdIeXCjzMVC5fI",
-  };
+//   try {
+//     const apiResponse = await axios.post(apiUrl, req.body, { headers });
 
-  try {
-    const apiResponse = await axios.post(apiUrl, req.body, { headers });
-
-    if (apiResponse.status === 200) {
-      res.json({ content: apiResponse.data.content });
-    } else {
-      res
-        .status(apiResponse.status)
-        .json({ error: "Bad response from the AI bot, try again!" });
-    }
-  } catch (error) {
-    console.error("Error:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     if (apiResponse.status === 200) {
+//       res.json({ content: apiResponse.data.content });
+//     } else {
+//       res
+//         .status(apiResponse.status)
+//         .json({ error: "Bad response from the AI bot, try again!" });
+//     }
+//   } catch (error) {
+//     console.error("Error:", error.message);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 app.listen(4000, () => console.log("Server listening on port 4000..."));
