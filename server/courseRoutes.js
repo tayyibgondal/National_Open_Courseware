@@ -36,29 +36,45 @@ router.get("/:courseId", async (req, res) => {
 
 // To create a course - 3 steps
 router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
+  let newPath = null;
   try {
-    // req.file will give the file within server.
-    const { originalname, path } = req.file;
-    const parts = originalname.split(".");
-    const ext = parts[parts.length - 1];
-    const newPath = path + "." + ext;
-    fs.renameSync(path, newPath);
-
-      const { name, instructor, email, university, year, description, userId } =
-        req.body;
-      const course = await Course.create({
-        name,
-        instructor,
-        email,
-        university,
-        year,
-        description,
-        content: newPath,
-        uploader: userId,
-      });
-      res.status(200).json({ message: "Course added!" });
+    try {
+      // req.file will give the file within server.
+      const { originalname, path } = req.file;
+      const parts = originalname.split(".");
+      const ext = parts[parts.length - 1];
+      newPath = path + "." + ext;
+      fs.renameSync(path, newPath);
+    } catch (e) {
+      newPath = null;
+    }
+    const { name, instructor, email, university, year, description, userId } =
+      req.body;
+    // Check if all required fields are present
+    if (
+      !name ||
+      !instructor ||
+      !email ||
+      !university ||
+      !year ||
+      !description ||
+      !userId
+    ) {
+      throw new Error("Missing required fields");
+    }
+    const course = await Course.create({
+      name,
+      instructor,
+      email,
+      university,
+      year,
+      description,
+      content: newPath,
+      uploader: userId,
+    });
+    res.status(200).json({ message: "Course added!" });
   } catch (e) {
-    console.log(e);
+    res.status(500).json({ message: "Error!" });
   }
 });
 
@@ -79,24 +95,24 @@ router.put(
         fs.renameSync(path, newPath);
       }
 
-        const { name, instructor, email, university, year, description } =
-          req.body;
-        const courseOld = await Course.findById(courseId);
-        // Use findByIdAndUpdate with the correct syntax
-        const updatedCourse = await Course.findByIdAndUpdate(
-          courseId,
-          {
-            name,
-            instructor,
-            email,
-            university,
-            year,
-            description,
-            content: newPath == null ? courseOld.content : newPath,
-          },
-          { new: true } // This option returns the modified document, not the original
-        );
-        res.status(200).json({ message: "Post updated!" });
+      const { name, instructor, email, university, year, description } =
+        req.body;
+      const courseOld = await Course.findById(courseId);
+      // Use findByIdAndUpdate with the correct syntax
+      const updatedCourse = await Course.findByIdAndUpdate(
+        courseId,
+        {
+          name,
+          instructor,
+          email,
+          university,
+          year,
+          description,
+          content: newPath == null ? courseOld.content : newPath,
+        },
+        { new: true } // This option returns the modified document, not the original
+      );
+      res.status(200).json({ message: "Post updated!" });
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: "Internal server error!" });
@@ -106,7 +122,7 @@ router.put(
 
 // Delete endpoint
 router.delete("/delete/:courseId", async (req, res) => {
-  const { courseId } = req.params; 
+  const { courseId } = req.params;
   try {
     const course = await Course.findByIdAndDelete(courseId);
     if (!course) {

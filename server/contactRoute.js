@@ -16,7 +16,6 @@ router.post("/", async (req, res) => {
     name,
     email,
   });
-  console.log(contact);
   // Create reusable transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -38,13 +37,11 @@ router.post("/", async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Please check your email!" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 router.post("/donate", async (req, res) => {
-  console.log(req.body);
   const { name, email } = req.body;
 
   // Save this contact in database
@@ -52,7 +49,6 @@ router.post("/donate", async (req, res) => {
     name,
     email,
   });
-  console.log(contact);
   // Create reusable transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -74,7 +70,6 @@ router.post("/donate", async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Please check your email!" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });

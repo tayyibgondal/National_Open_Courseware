@@ -43,13 +43,21 @@ router.get("/:careerPathId", async (req, res) => {
 // To create a career path
 router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
   try {
-    const { originalname, path } = req.file;
-    const parts = originalname.split(".");
-    const ext = parts[parts.length - 1];
-    const newPath = path + "." + ext;
-    fs.renameSync(path, newPath);
+    let newPath = null;
+    try {
+      const { originalname, path } = req.file;
+      const parts = originalname.split(".");
+      const ext = parts[parts.length - 1];
+      const newPath = path + "." + ext;
+      fs.renameSync(path, newPath);
+    } catch (e) {
+      newPath = null;
+    }
 
     const { title, description } = req.body;
+    if (!title || !description) {
+      throw new Error("Missing required fields!");
+    }
     const careerPath = await CareerPath.create({
       title,
       description,
@@ -57,7 +65,6 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
     });
     res.status(200).json({ message: "CareerPath added!" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });

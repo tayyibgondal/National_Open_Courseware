@@ -45,12 +45,10 @@ router.get("/:faqId", async (req, res) => {
 // Create a new FAQ
 router.post("/create", async (req, res) => {
   try {
-    console.log(req.body);
     const { question, answer } = req.body;
     const newFaq = await Faq.create({ question, answer });
     res.status(201).json({ message: "FAQ created", faq: newFaq });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });

@@ -34,27 +34,34 @@ router.get("/:bookId", async (req, res) => {
 
 // To create a book - 3 steps
 router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
+  let newPath = null;
   try {
-    // req.file will give the file within server.
-    const { originalname, path } = req.file;
-    const parts = originalname.split(".");
-    const ext = parts[parts.length - 1];
-    const newPath = path + "." + ext;
-    fs.renameSync(path, newPath);
+    try {
+      // req.file will give the file within server.
+      const { originalname, path } = req.file;
+      const parts = originalname.split(".");
+      const ext = parts[parts.length - 1];
+      const newPath = path + "." + ext;
+      fs.renameSync(path, newPath);
+    } catch (e) {
+      newPath = null;
+    }
 
-      // If no error in token verification
-      const { title, summary, author, userId } = req.body;
-      const book = await Book.create({
-        title,
-        summary,
-        author,
-        book: newPath,
-        uploader: userId,
-      });
-      res.status(200).json({ message: "Book added!" });
-    
+    // If no error in token verification
+    const { title, summary, author, userId } = req.body;
+    if (!title || !summary || !author || !userId) {
+      throw new Error("Missing required fields");
+    }
+    const book = await Book.create({
+      title,
+      summary,
+      author,
+      book: newPath,
+      uploader: userId,
+    });
+    res.status(200).json({ message: "Book added!" });
   } catch (e) {
-    console.log(e);
+    res.status(500).json({ message: "Error!" });
   }
 });
 
@@ -75,21 +82,21 @@ router.put(
         fs.renameSync(path, newPath);
       }
       // We need user id; also, we need to verify the user
-        const { title, summary, author, userId } = req.body;
-        const bookOld = await Book.findById(bookId);
-        // Use findByIdAndUpdate with the correct syntax
-        const updatedBook = await Book.findByIdAndUpdate(
-          bookId,
-          {
-            title,
-            summary,
-            author,
-            book: newPath == null ? bookOld.book : newPath, // Keep the old cover if no new file is uploaded
-            userId
-          },
-          { new: true } // This option returns the modified document, not the original
-        );
-        res.status(200).json({ message: "Post updated!" });
+      const { title, summary, author, userId } = req.body;
+      const bookOld = await Book.findById(bookId);
+      // Use findByIdAndUpdate with the correct syntax
+      const updatedBook = await Book.findByIdAndUpdate(
+        bookId,
+        {
+          title,
+          summary,
+          author,
+          book: newPath == null ? bookOld.book : newPath, // Keep the old cover if no new file is uploaded
+          userId,
+        },
+        { new: true } // This option returns the modified document, not the original
+      );
+      res.status(200).json({ message: "Post updated!" });
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: "Internal server error!" });
@@ -99,7 +106,7 @@ router.put(
 
 // Delete endpoint
 router.delete("/delete/:bookId", async (req, res) => {
-  const { bookId } = req.params; 
+  const { bookId } = req.params;
   try {
     const book = await Book.findByIdAndDelete(bookId);
     if (!book) {
