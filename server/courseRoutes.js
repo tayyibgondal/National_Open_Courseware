@@ -72,7 +72,7 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
       content: newPath,
       uploader: userId,
     });
-    res.status(200).json({ message: "Course added!" });
+    res.status(200).json({ message: "Course added!", id: course._id });
   } catch (e) {
     res.status(500).json({ message: "Error!" });
   }
@@ -114,7 +114,6 @@ router.put(
       );
       res.status(200).json({ message: "Post updated!" });
     } catch (err) {
-      console.log(err);
       res.status(500).json({ message: "Internal server error!" });
     }
   }
@@ -130,7 +129,6 @@ router.delete("/delete/:courseId", async (req, res) => {
     }
     res.json({ message: "Deleted successfully" });
   } catch (e) {
-    console.error(e);
     res.status(500).json({ message: "Internal server error!" });
   }
 });
@@ -155,7 +153,6 @@ router.get("/search/:query", async (req, res) => {
       res.status(200).json(searchResults);
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
