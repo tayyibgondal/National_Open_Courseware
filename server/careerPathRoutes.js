@@ -61,7 +61,9 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
       description,
       file: newPath,
     });
-    res.status(200).json({ message: "CareerPath added!" });
+    res
+      .status(200)
+      .json({ message: "CareerPath added!", careerPath: careerPath });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
   }
