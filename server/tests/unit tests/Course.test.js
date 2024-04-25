@@ -119,7 +119,7 @@ describe("PUT /courses/edit/:courseId", () => {
 
     // Check the status code and response body
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Post updated!");
+    expect(response.body.message).toBe("Course updated!");
 
     // Check if the book is correctly updated in the database
     const updatedCourse = await Course.findById(courseId);

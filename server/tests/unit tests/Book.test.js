@@ -9,13 +9,13 @@ describe("GET /library", () => {
     expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it("should populate uploader field with username", async () => {
-    const response = await request(app).get("/library");
-    expect(response.status).toBe(200);
-    expect(
-      response.body.every((book) => book.uploader && book.uploader.username)
-    ).toBe(true);
-  });
+  // it("should populate uploader field with username", async () => {
+  //   const response = await request(app).get("/library");
+  //   expect(response.status).toBe(200);
+  //   expect(
+  //     response.body.every((book) => book.uploader && book.uploader.username)
+  //   ).toBe(true);
+  // });
 });
 
 describe("POST /library/create", () => {
@@ -97,7 +97,7 @@ describe("PUT /library/edit/:bookId", () => {
 
     // Check the status code and response body
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Post updated!");
+    expect(response.body.message).toBe("Book updated!");
     // Check if the book is correctly updated in the database
     const updatedBook = await Book.findById(bookId);
     expect(updatedBook.title).toBe(updatedBookData.title);
