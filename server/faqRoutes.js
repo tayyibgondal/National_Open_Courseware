@@ -9,7 +9,17 @@ router.get("/", async (req, res) => {
     const faqs = await Faq.find().sort({ createdAt: -1 });
     res.status(200).json(faqs);
   } catch (error) {
-    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Create a new FAQ
+router.post("/create", async (req, res) => {
+  try {
+    const { question, answer } = req.body;
+    const newFaq = await Faq.create({ question, answer });
+    res.status(201).json({ message: "FAQ created", faq: newFaq });
+  } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -22,7 +32,6 @@ router.get("/unanswered", async (req, res) => {
     });
     res.json(unanswered);
   } catch (e) {
-    console.log(e);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -36,18 +45,6 @@ router.get("/:faqId", async (req, res) => {
       return res.status(404).json({ message: "FAQ not found" });
     }
     res.status(200).json(faq);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-// Create a new FAQ
-router.post("/create", async (req, res) => {
-  try {
-    const { question, answer } = req.body;
-    const newFaq = await Faq.create({ question, answer });
-    res.status(201).json({ message: "FAQ created", faq: newFaq });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -68,7 +65,6 @@ router.put("/edit/:faqId", async (req, res) => {
     }
     res.status(200).json({ message: "FAQ updated", faq: updatedFaq });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -83,7 +79,6 @@ router.delete("/delete/:faqId", async (req, res) => {
     }
     res.status(200).json({ message: "FAQ deleted", faq: deletedFaq });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
