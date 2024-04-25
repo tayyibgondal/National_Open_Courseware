@@ -19,7 +19,7 @@
   "scripts": {
     "start": "node index",
     "dev": "nodemon server.js",
-    "test": "jest ./tests/security tests/Authentication.test.js"
+    "test": "jest ./tests/integration tests/CourseIntegration.test.js"
   },
   "devDependencies": {
     "jest": "^29.7.0",
