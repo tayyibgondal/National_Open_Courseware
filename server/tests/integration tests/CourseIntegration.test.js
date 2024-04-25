@@ -44,7 +44,7 @@ describe("Integration Tests: Courses Endpoints", () => {
   describe("PUT /courses/edit/:courseId", () => {
     it("should update a course and return status code 200", async () => {
       const updatedCourseData = {
-        name: "Updated Test Course",
+        name: "Updated Test Course HEHE",
         instructor: "Updated Test Instructor",
         email: "updated_test@example.com",
         university: "Updated Test University",
