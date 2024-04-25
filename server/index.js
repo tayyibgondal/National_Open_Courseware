@@ -106,8 +106,9 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
       isAdmin: false,
     });
-    res.status(200).json({ message: "User has been created!" });
+    res.status(200).json({ message: "User has been created!", user: user });
   } catch (e) {
+    console.error(e);
     res.status(500).json({ message: "Could not register" });
   }
 });
