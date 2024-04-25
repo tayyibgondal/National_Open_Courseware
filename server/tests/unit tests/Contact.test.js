@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../index"); // Replace with the path to your Express app file
+const app = require("../../index"); // Replace with the path to your Express app file
 
 jest.mock("nodemailer");
 

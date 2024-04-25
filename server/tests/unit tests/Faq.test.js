@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../index");
-const Faq = require("../models/FAQ"); // Assuming you have imported the Faq model
+const app = require("../../index");
+const Faq = require("../../models/FAQ"); // Assuming you have imported the Faq model
 
 describe("GET /faqs", () => {
   it("should return status code 200 and an array of faqs", async () => {

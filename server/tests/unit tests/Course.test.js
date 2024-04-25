@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../index");
-const Course = require("../models/Course");
+const app = require("../../index");
+const Course = require("../../models/Course");
 
 // =================== Testing the GET ALL unit =======================
 describe("GET /courses", () => {

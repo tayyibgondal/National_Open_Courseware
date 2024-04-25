@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../index");
-const CareerPath = require("../models/CareerPath");
+const app = require("../../index");
+const CareerPath = require("../../models/CareerPath");
 
 describe("GET /careerpaths", () => {
   it("should return status code 200 and an array of career paths", async () => {

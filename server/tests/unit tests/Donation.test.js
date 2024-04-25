@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../index"); // Assuming your Express app instance is exported from 'index.js' or 'app.js'
-const Donation = require("../models/Donation"); // Assuming you have imported the Donation model
+const app = require("../../index"); // Assuming your Express app instance is exported from 'index.js' or 'app.js'
+const Donation = require("../../models/Donation"); // Assuming you have imported the Donation model
 
 describe("POST /donate", () => {
   it("should create a new donation record and return status code 200", async () => {
