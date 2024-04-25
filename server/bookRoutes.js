@@ -98,7 +98,6 @@ router.put(
       );
       res.status(200).json({ message: "Post updated!" });
     } catch (err) {
-      console.log(err);
       res.status(500).json({ message: "Internal server error!" });
     }
   }
@@ -114,7 +113,6 @@ router.delete("/delete/:bookId", async (req, res) => {
     }
     res.json({ message: "Deleted successfully" });
   } catch (e) {
-    console.error(e);
     res.status(500).json({ message: "Internal server error!" });
   }
 });
@@ -139,7 +137,6 @@ router.get("/search/:query", async (req, res) => {
       res.status(200).json(searchResults);
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
