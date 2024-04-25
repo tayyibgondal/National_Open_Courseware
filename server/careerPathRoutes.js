@@ -19,8 +19,7 @@ router.get("/", async (req, res) => {
       .limit(20);
     res.status(200).json(careerPaths);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error!" });
   }
 });
 
@@ -35,8 +34,7 @@ router.get("/:careerPathId", async (req, res) => {
       res.status(200).json(careerPath);
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error!" });
   }
 });
 
@@ -65,7 +63,7 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
     });
     res.status(200).json({ message: "CareerPath added!" });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error!" });
   }
 });
 
@@ -98,8 +96,7 @@ router.put(
       );
       res.status(200).json({ message: "CareerPath updated!" });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ message: "Internal Server Error!" });
     }
   }
 );
@@ -123,8 +120,7 @@ router.delete("/delete/:careerPathId", async (req, res) => {
       res.status(200).json({ message: "CareerPath deleted!" });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error!" });
   }
 });
 
@@ -146,8 +142,7 @@ router.get("/search/:query", async (req, res) => {
       res.status(200).json(searchResults);
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error!" });
   }
 });
 
