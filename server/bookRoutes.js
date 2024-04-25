@@ -59,7 +59,7 @@ router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
       book: newPath,
       uploader: userId,
     });
-    res.status(200).json({ message: "Book added!" });
+    res.status(200).json({ message: "Book added!", book: book });
   } catch (e) {
     res.status(500).json({ message: "Error!" });
   }
@@ -96,7 +96,7 @@ router.put(
         },
         { new: true } // This option returns the modified document, not the original
       );
-      res.status(200).json({ message: "Post updated!" });
+      res.status(200).json({ message: "Book updated!" });
     } catch (err) {
       res.status(500).json({ message: "Internal server error!" });
     }
