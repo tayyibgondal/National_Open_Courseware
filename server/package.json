@@ -19,7 +19,7 @@
   "scripts": {
     "start": "node index",
     "dev": "nodemon server.js",
-    "test": "jest test tests"
+    "test": "jest test tests\\security tests\\Security-equiv-part.test.js"
   },
   "devDependencies": {
     "jest": "^29.7.0",

@@ -638,7 +638,7 @@ describe("GET /library/search/:query", () => {
 });
 
 // ==================================================
-// Testing with empty query for each field
+// Testing with empty fields
 // ==================================================
 // Title Tests
 describe("Search by Title", () => {
