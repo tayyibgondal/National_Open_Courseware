@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../../index");
-const Book = require("../../models/Book");
+const app = require("../../../index");
+const Book = require("../../../models/Book");
 
 describe("GET /library", () => {
   it("should return status code 200 and an array of books", async () => {
@@ -204,3 +204,5 @@ describe("GET /library/search/:query", () => {
     expect(response.body.message).toBe("No results found");
   });
 });
+
+

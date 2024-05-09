@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../../index");
-const Course = require("../../models/Course");
+const app = require("../../../index");
+const Course = require("../../../models/Course");
 
 // =================== Testing the GET ALL unit =======================
 describe("GET /courses", () => {
@@ -9,16 +9,6 @@ describe("GET /courses", () => {
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
   });
-
-  // it("should populate uploader field with username", async () => {
-  //   const response = await request(app).get("/courses");
-  //   expect(response.status).toBe(200);
-  //   expect(
-  //     response.body.every(
-  //       (course) => course.uploader && course.uploader.username
-  //     )
-  //   ).toBe(true);
-  // });
 });
 
 // =================== Testing the POST unit =======================
