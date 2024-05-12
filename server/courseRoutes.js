@@ -38,16 +38,18 @@ router.get("/:courseId", async (req, res) => {
 router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
   let newPath = null;
   try {
-    try {
-      // req.file will give the file within server.
-      const { originalname, path } = req.file;
-      const parts = originalname.split(".");
-      const ext = parts[parts.length - 1];
-      newPath = path + "." + ext;
-      fs.renameSync(path, newPath);
-    } catch (e) {
-      newPath = null;
-    }
+    // -----------------------------
+    // try {
+    //   // req.file will give the file within server.
+    //   const { originalname, path } = req.file;
+    //   const parts = originalname.split(".");
+    //   const ext = parts[parts.length - 1];
+    //   newPath = path + "." + ext;
+    //   fs.renameSync(path, newPath);
+    // } catch (e) {
+    //   newPath = null;
+    // }
+    // -----------------------------
     const { name, instructor, email, university, year, description, userId } =
       req.body;
     // Check if all required fields are present
@@ -87,13 +89,15 @@ router.put(
     // If user has sent file, update its extension in the saved folder
     let newPath = null;
     try {
-      if (req.file) {
-        const { originalname, path } = req.file;
-        const parts = originalname.split(".");
-        const ext = parts[parts.length - 1];
-        newPath = path + "." + ext;
-        fs.renameSync(path, newPath);
-      }
+      // -----------------------------
+      // if (req.file) {
+      //   const { originalname, path } = req.file;
+      //   const parts = originalname.split(".");
+      //   const ext = parts[parts.length - 1];
+      //   newPath = path + "." + ext;
+      //   fs.renameSync(path, newPath);
+      // }
+      // -----------------------------
 
       const { name, instructor, email, university, year, description } =
         req.body;
@@ -124,9 +128,11 @@ router.delete("/delete/:courseId", async (req, res) => {
   const { courseId } = req.params;
   try {
     const course = await Course.findByIdAndDelete(courseId);
-    if (!course) {
-      return res.status(404).json({ message: "Course not found" });
-    }
+    // --------------------------------------
+    // if (!course) {
+    //   return res.status(404).json({ message: "Course not found" });
+    // }
+    // --------------------------------------
     res.json({ message: "Deleted successfully" });
   } catch (e) {
     res.status(500).json({ message: "Internal server error!" });
@@ -136,24 +142,20 @@ router.delete("/delete/:courseId", async (req, res) => {
 // Search functionality
 router.get("/search/:query", async (req, res) => {
   const { query } = req.params;
-  try {
-    const searchResults = await Course.find(
-      { $text: { $search: query } },
-      { score: { $meta: "textScore" } }
-    )
-      .sort({ score: { $meta: "textScore" } })
-      .limit(5)
-      .exec();
+  const searchResults = await Course.find(
+    { $text: { $search: query } },
+    { score: { $meta: "textScore" } }
+  )
+    .sort({ score: { $meta: "textScore" } })
+    .limit(5)
+    .exec();
 
-    if (searchResults.length === 0) {
-      // If no results found, respond with 404 status
-      res.status(404).json({ message: "No results found" });
-    } else {
-      // If results found, respond with the search results
-      res.status(200).json(searchResults);
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+  if (searchResults.length === 0) {
+    // If no results found, respond with 404 status
+    res.status(404).json({ message: "No results found" });
+  } else {
+    // If results found, respond with the search results
+    res.status(200).json(searchResults);
   }
 });
 

@@ -36,16 +36,18 @@ router.get("/:bookId", async (req, res) => {
 router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
   let newPath = null;
   try {
-    try {
-      // req.file will give the file within server.
-      const { originalname, path } = req.file;
-      const parts = originalname.split(".");
-      const ext = parts[parts.length - 1];
-      const newPath = path + "." + ext;
-      fs.renameSync(path, newPath);
-    } catch (e) {
-      newPath = null;
-    }
+    // -----------------------------
+    // try {
+    //   // req.file will give the file within server.
+    //   const { originalname, path } = req.file;
+    //   const parts = originalname.split(".");
+    //   const ext = parts[parts.length - 1];
+    //   const newPath = path + "." + ext;
+    //   fs.renameSync(path, newPath);
+    // } catch (e) {
+    //   newPath = null;
+    // }
+    // -----------------------------
 
     // If no error in token verification
     const { title, summary, author, userId } = req.body;
@@ -74,13 +76,15 @@ router.put(
     // If user has sent file, update its extension in the saved folder
     let newPath = null;
     try {
-      if (req.file) {
-        const { originalname, path } = req.file;
-        const parts = originalname.split(".");
-        const ext = parts[parts.length - 1];
-        newPath = path + "." + ext;
-        fs.renameSync(path, newPath);
-      }
+      // -----------------------------
+      // if (req.file) {
+      //   const { originalname, path } = req.file;
+      //   const parts = originalname.split(".");
+      //   const ext = parts[parts.length - 1];
+      //   newPath = path + "." + ext;
+      //   fs.renameSync(path, newPath);
+      // }
+      // -----------------------------
       // We need user id; also, we need to verify the user
       const { title, summary, author, userId } = req.body;
       const bookOld = await Book.findById(bookId);
@@ -108,9 +112,11 @@ router.delete("/delete/:bookId", async (req, res) => {
   const { bookId } = req.params;
   try {
     const book = await Book.findByIdAndDelete(bookId);
-    if (!book) {
-      return res.status(404).json({ message: "Book not found" });
-    }
+    // ----------------------------------
+    // if (!book) {
+    //   return res.status(404).json({ message: "Book not found" });
+    // }
+    // ----------------------------------
     res.json({ message: "Deleted successfully" });
   } catch (e) {
     res.status(500).json({ message: "Internal server error!" });
@@ -120,24 +126,20 @@ router.delete("/delete/:bookId", async (req, res) => {
 // Search a book
 router.get("/search/:query", async (req, res) => {
   const { query } = req.params;
-  try {
-    const searchResults = await Book.find(
-      { $text: { $search: query } },
-      { score: { $meta: "textScore" } }
-    )
-      .sort({ score: { $meta: "textScore" } })
-      .limit(5)
-      .exec();
+  const searchResults = await Book.find(
+    { $text: { $search: query } },
+    { score: { $meta: "textScore" } }
+  )
+    .sort({ score: { $meta: "textScore" } })
+    .limit(5)
+    .exec();
 
-    if (searchResults.length === 0) {
-      // If no results found, respond with 404 status
-      res.status(404).json({ message: "No results found" });
-    } else {
-      // If results found, respond with the search results
-      res.status(200).json(searchResults);
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+  if (searchResults.length === 0) {
+    // If no results found, respond with 404 status
+    res.status(404).json({ message: "No results found" });
+  } else {
+    // If results found, respond with the search results
+    res.status(200).json(searchResults);
   }
 });
 

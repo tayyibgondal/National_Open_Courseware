@@ -13,14 +13,8 @@ const router = express.Router();
 
 // To get all career paths
 router.get("/", async (req, res) => {
-  try {
-    const careerPaths = await CareerPath.find()
-      .sort({ createdAt: -1 })
-      .limit(20);
-    res.status(200).json(careerPaths);
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error!" });
-  }
+  const careerPaths = await CareerPath.find().sort({ createdAt: -1 }).limit(20);
+  res.status(200).json(careerPaths);
 });
 
 // To get one career path by ID
@@ -28,11 +22,15 @@ router.get("/:careerPathId", async (req, res) => {
   try {
     const { careerPathId } = req.params;
     const careerPath = await CareerPath.findById(careerPathId);
-    if (!careerPath) {
-      res.status(404).json({ message: "CareerPath not found" });
-    } else {
-      res.status(200).json(careerPath);
-    }
+    // ----------------------------------
+    // if (!careerPath) {
+    // res.status(404).json({ message: "CareerPath not found" });
+    // } else {
+    // ----------------------------------
+    res.status(200).json(careerPath);
+    // ----------------------------------
+    // }
+    // ----------------------------------
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
   }
@@ -42,15 +40,17 @@ router.get("/:careerPathId", async (req, res) => {
 router.post("/create", uploadMiddleware.single("file"), async (req, res) => {
   try {
     let newPath = null;
-    try {
-      const { originalname, path } = req.file;
-      const parts = originalname.split(".");
-      const ext = parts[parts.length - 1];
-      const newPath = path + "." + ext;
-      fs.renameSync(path, newPath);
-    } catch (e) {
-      newPath = null;
-    }
+    // -----------------------------
+    // try {
+    //   const { originalname, path } = req.file;
+    //   const parts = originalname.split(".");
+    //   const ext = parts[parts.length - 1];
+    //   const newPath = path + "." + ext;
+    //   fs.renameSync(path, newPath);
+    // } catch (e) {
+    //   newPath = null;
+    // }
+    // -----------------------------
 
     const { title, description } = req.body;
     if (!title || !description) {
@@ -77,13 +77,15 @@ router.put(
     const { careerPathId } = req.params;
     let newPath = null;
     try {
-      if (req.file) {
-        const { originalname, path } = req.file;
-        const parts = originalname.split(".");
-        const ext = parts[parts.length - 1];
-        newPath = path + "." + ext;
-        fs.renameSync(path, newPath);
-      }
+      // -----------------------------
+      // if (req.file) {
+      //   const { originalname, path } = req.file;
+      //   const parts = originalname.split(".");
+      //   const ext = parts[parts.length - 1];
+      //   newPath = path + "." + ext;
+      //   fs.renameSync(path, newPath);
+      // }
+      // -----------------------------
 
       const { title, description } = req.body;
       const careerPathOld = await CareerPath.findById(careerPathId);
@@ -109,18 +111,22 @@ router.delete("/delete/:careerPathId", async (req, res) => {
     const { careerPathId } = req.params;
     const careerPath = await CareerPath.findById(careerPathId);
 
-    if (!careerPath) {
-      res.status(404).json({ message: "CareerPath not found" });
-    } else {
-      // Remove the associated file from the uploads folder
-      if (careerPath.file) {
-        fs.unlinkSync(careerPath.file);
-      }
+    // --------------------------------------
+    // if (!careerPath) {
+    // --------------------------------------
+    res.status(404).json({ message: "CareerPath not found" });
+    // --------------------------------------
+    // } else {
+    // // Remove the associated file from the uploads folder
+    // if (careerPath.file) {
+    //   fs.unlinkSync(careerPath.file);
+    // }
+    // --------------------------------------
 
-      // Delete the career path from the database
-      await CareerPath.findByIdAndDelete(careerPathId);
-      res.status(200).json({ message: "CareerPath deleted!" });
-    }
+    // Delete the career path from the database
+    await CareerPath.findByIdAndDelete(careerPathId);
+    res.status(200).json({ message: "CareerPath deleted!" });
+    // }
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
   }
@@ -129,22 +135,18 @@ router.delete("/delete/:careerPathId", async (req, res) => {
 // Search functionality for career paths
 router.get("/search/:query", async (req, res) => {
   const { query } = req.params;
-  try {
-    const searchResults = await CareerPath.find(
-      { $text: { $search: query } },
-      { score: { $meta: "textScore" } }
-    )
-      .sort({ score: { $meta: "textScore" } })
-      .limit(5)
-      .exec();
+  const searchResults = await CareerPath.find(
+    { $text: { $search: query } },
+    { score: { $meta: "textScore" } }
+  )
+    .sort({ score: { $meta: "textScore" } })
+    .limit(5)
+    .exec();
 
-    if (searchResults.length === 0) {
-      res.status(404).json({ message: "No results found" });
-    } else {
-      res.status(200).json(searchResults);
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error!" });
+  if (searchResults.length === 0) {
+    res.status(404).json({ message: "No results found" });
+  } else {
+    res.status(200).json(searchResults);
   }
 });
 
