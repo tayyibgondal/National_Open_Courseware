@@ -9,6 +9,56 @@ describe("GET /library", () => {
     expect(Array.isArray(response.body)).toBe(true);
   });
 
+  describe("GET /library/:bookId", () => {
+    let bookId;
+
+    beforeAll(async () => {
+      // Create a book in the database and store its ID
+      const newBook = new Book({
+        title: "Test Book",
+        summary: "Test Summary",
+        author: "Test Author",
+        userId: "658964aeacfe9dbdb12ad5f1",
+      });
+      const createdBook = await newBook.save();
+      bookId = createdBook._id;
+    });
+
+    afterAll(async () => {
+      // Clean up: Delete the created book after tests
+      await Book.findByIdAndDelete(bookId);
+    });
+
+    it("should return status code 200 and a book object", async () => {
+      // Send a GET request to retrieve the book
+      const response = await request(app).get(`/library/${bookId}`);
+
+      // Check the status code and response body
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("title", "Test Book");
+      expect(response.body).toHaveProperty("summary", "Test Summary");
+      expect(response.body).toHaveProperty("author", "Test Author");
+      expect(response.body).toHaveProperty(
+        "userId",
+        "658964aeacfe9dbdb12ad5f1"
+      );
+    });
+
+    it("should return status code 500 if an internal server error occurs", async () => {
+      // Mock the behavior of Book.findById() to throw an error
+      jest.spyOn(Book, "findById").mockImplementationOnce(() => {
+        throw new Error("Database connection error");
+      });
+
+      // Send a GET request to retrieve the book
+      const response = await request(app).get(`/library/${bookId}`);
+
+      // Check if the response has status code 500
+      expect(response.status).toBe(500);
+      expect(response.body.message).toBe("Internal server error!");
+    });
+  });
+
   // it("should populate uploader field with username", async () => {
   //   const response = await request(app).get("/library");
   //   expect(response.status).toBe(200);
@@ -147,7 +197,7 @@ describe("DELETE /library/delete/:bookId", () => {
     expect(deletedBook).toBeNull();
   });
 
-  it("should return status code 500 if book not found", async () => {
+  it("should return status code 500 if invlaid id", async () => {
     // Send a DELETE request with an invalid ID to trigger a 500 response
     const response = await request(app).delete(`/library/delete/invalidId`);
 
@@ -204,5 +254,3 @@ describe("GET /library/search/:query", () => {
     expect(response.body.message).toBe("No results found");
   });
 });
-
-

@@ -27,6 +27,9 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testTimeout": 40000
-  }
+    "testTimeout": 40000,
+    "collectCoverage": true,
+    "coverageReporters": ["html", "text"],
+    "coverageDirectory": "coverage"
+    }
 }

@@ -190,3 +190,55 @@ describe("GET /careerpaths/search/:query", () => {
     expect(response.body.message).toBe("No results found");
   });
 });
+
+describe("GET /careerpaths/:careerPathId", () => {
+  let careerPathId;
+
+  beforeAll(async () => {
+    // Create a career path in the database and store its ID
+    const newCareerPath = new CareerPath({
+      title: "Test Career Path",
+      description: "Test Description",
+    });
+    const createdCareerPath = await newCareerPath.save();
+    careerPathId = createdCareerPath._id;
+  });
+
+  afterAll(async () => {
+    // Clean up: Delete the created career path after tests
+    await CareerPath.findByIdAndDelete(careerPathId);
+  });
+
+  it("should return status code 200 and a career path object", async () => {
+    // Send a GET request to retrieve the career path
+    const response = await request(app).get(`/careerpaths/${careerPathId}`);
+
+    // Check the status code and response body
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("title", "Test Career Path");
+    expect(response.body).toHaveProperty("description", "Test Description");
+  });
+
+  it("should return status code 404 if the career path does not exist", async () => {
+    // Send a GET request with an invalid career path ID
+    const response = await request(app).get("/careerpaths/invalidId");
+
+    // Check if the response has status code 404
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("CareerPath not found");
+  });
+
+  it("should return status code 500 if an internal server error occurs", async () => {
+    // Mock the behavior of CareerPath.findById() to throw an error
+    jest.spyOn(CareerPath, "findById").mockImplementationOnce(() => {
+      throw new Error("Database connection error");
+    });
+
+    // Send a GET request to retrieve the career path
+    const response = await request(app).get(`/careerpaths/${careerPathId}`);
+
+    // Check if the response has status code 500
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal Server Error!");
+  });
+});

@@ -226,3 +226,65 @@ describe("GET /courses/search/:query", () => {
     expect(response.body.message).toBe("No results found");
   });
 });
+
+// =================== Testing the GET unit for a single course =======================
+describe("GET /courses/:courseId", () => {
+  let courseId;
+
+  // Before all hook to create a course in the database
+  beforeAll(async () => {
+    const newCourse = new Course({
+      name: "Test Course",
+      instructor: "Test Instructor",
+      email: "test@example.com",
+      university: "Test University",
+      year: "2022",
+      description: "Test Description",
+      uploader: "658964aeacfe9dbdb12ad5f1",
+    });
+    const createdCourse = await newCourse.save();
+    courseId = createdCourse._id;
+  });
+
+  // After all hook to delete the created course from the database
+  afterAll(async () => {
+    await Course.findByIdAndDelete(courseId);
+  });
+
+  // Test case to get a single course
+  it("should return status code 200 and the course object", async () => {
+    // Send a GET request to retrieve the course
+    const response = await request(app).get(`/courses/${courseId}`);
+
+    // Check the status code and response body
+    expect(response.status).toBe(200);
+    expect(response.body.name).toBe("Test Course"); // Assuming the course name is known
+    expect(response.body.instructor).toBe("Test Instructor"); // Assuming the instructor is known
+    // Add more assertions for other properties of the course object as needed
+  });
+
+  // Test case to handle errors when course ID is invalid
+  it("should return status code 500 if course ID is invalid", async () => {
+    // Send a GET request with an invalid course ID to trigger an error
+    const response = await request(app).get(`/courses/invalidId`);
+
+    // Check if the response has status code 500
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal server error!");
+  });
+
+  // Test case to handle internal server error
+  it("should return status code 500 if an internal server error occurs", async () => {
+    // Mock the behavior of the database to simulate an internal server error
+    jest.spyOn(Course, "findById").mockImplementationOnce(() => {
+      throw new Error("Database connection error");
+    });
+
+    // Send a GET request to retrieve the course
+    const response = await request(app).get(`/courses/${courseId}`);
+
+    // Check if the response has status code 500
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal server error!");
+  });
+});
