@@ -23,13 +23,29 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "jest-html-reporters": "^3.1.7",
+    "jest-junit": "^16.0.0",
     "supertest": "^6.3.4"
   },
   "jest": {
     "testEnvironment": "node",
     "testTimeout": 40000,
     "collectCoverage": true,
-    "coverageReporters": ["html", "text"],
-    "coverageDirectory": "coverage"
-    }
+    "coverageReporters": [
+      "html",
+      "text"
+    ],
+    "coverageDirectory": "coverage",
+    "reporters": [
+      "default",
+      [
+        "jest-html-reporters",
+        {
+          "publicPath": "./html-report",
+          "filename": "report.html",
+          "expand": true
+        }
+      ]
+    ]
+  }
 }
